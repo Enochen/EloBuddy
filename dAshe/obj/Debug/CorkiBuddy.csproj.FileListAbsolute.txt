@@ -1,0 +1,2 @@
+C:\Users\Darak\OneDrive\Documents\League\EloBuddy\Addons\CorkiBuddy\CorkiBuddy\bin\Debug\CorkiBuddy.exe.config
+C:\Users\Darak\OneDrive\Documents\League\EloBuddy\Addons\CorkiBuddy\CorkiBuddy\obj\Debug\CorkiBuddy.csprojResolveAssemblyReference.cache
