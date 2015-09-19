@@ -18,10 +18,10 @@
             fMenu = MainMenu.AddMenu("FeederBuddy", "feederbuddy");
 
             fMenu.AddGroupLabel("FeederBuddy - Darakath");
-            fMenu.AddLabel("A lot of code is taken from Blacky's BlackFeeder");
-
+            fMenu.AddLabel("A lot of code is taken from blacky's BlackFeeder :^)");
+            fMenu.AddSeparator();
             fMenu.Add("FeedingActivated", new CheckBox("Feeding Activated"));
-            fMenu.Add("FeedingFeedMode", new Slider("FeedMode: (0-Top, 1-Mid, 2-Bot, 4-Random)", 4, 0, 4));
+            fMenu.Add("FeedingFeedMode", new Slider("FeedMode: (0-Mid, 1-Bot, 2-Top, 3-Random)", 0, 0, 3));
 
             feMenu = fMenu.AddSubMenu("Feeding", "feedingmenu");
             feMenu.AddLabel("Feeding Options");
