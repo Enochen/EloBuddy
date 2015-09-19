@@ -11,7 +11,6 @@ namespace FeederBuddy
         {
             try
             {
-                //Game.OnLoad += Entry.OnLoad;
                 Loading.OnLoadingComplete += Entry.OnLoad;
             }
             catch (Exception e)

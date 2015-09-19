@@ -78,7 +78,6 @@ namespace FeederBuddy.SRShopAI
             Queue = ShoppingQueue();
             AlterInventory();
 
-            //Game.PrintChat("[{0}] Autobuy Loaded", ObjectManager.Player.ChampionName);
             BuyItems();
         }
         public static Queue<Item> ShoppingQueue()
