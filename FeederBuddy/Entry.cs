@@ -423,19 +423,19 @@
                 Surrender();
             }
 
-            if (player.IsDead)
+            if (Player.Instance.IsDead)
             {
                 TopVectorReached = false;
                 BotVectorReached = false;
             }
             else
             {
-                if (player.Distance(BotVector3) <= 300)
+                if (Player.Instance.Distance(BotVector3) <= 400)
                 {
                     BotVectorReached = true;
                 }
 
-                if (player.Distance(TopVector3) <= 300)
+                if (Player.Instance.Distance(TopVector3) <= 400)
                 {
                     TopVectorReached = true;
                 }
