@@ -48,7 +48,7 @@
 
         private static readonly Dictionary<SpellSlot, CheckBox> harassSS = new Dictionary<SpellSlot, CheckBox>();
 
-        private static Menu mainMenu;
+        private static Menu mainMenu, comboMenu, harassMenu, manaMenu;
 
         private static Slider manaQ, manaW, manaR, manaHarass;
 
@@ -128,21 +128,22 @@
             mainMenu = MainMenu.AddMenu("dAshe", "dAsheMenu");
             mainMenu.AddGroupLabel("dAshe by Darakath - Enjoy the bugs");
             mainMenu.AddSeparator();
-            mainMenu.AddGroupLabel("Combo");
-            comboSS[SpellSlot.Q] = mainMenu.Add("comboUseQ", new CheckBox("Use Q"));
-            comboSS[SpellSlot.W] = mainMenu.Add("comboUseW", new CheckBox("Use W"));
-            comboSS[SpellSlot.R] = mainMenu.Add("comboUseR", new CheckBox("Use R"));
-            mainMenu.AddSeparator();
+            comboMenu = mainMenu.AddSubMenu("Combo");   
+            comboMenu.AddGroupLabel("Combo Options");
+            comboSS[SpellSlot.Q] = comboMenu.Add("comboUseQ", new CheckBox("Use Q"));
+            comboSS[SpellSlot.W] = comboMenu.Add("comboUseW", new CheckBox("Use W"));
+            comboSS[SpellSlot.R] = comboMenu.Add("comboUseR", new CheckBox("Use R"));
             //mainMenu.AddGroupLabel("Waveclear");
             //waveClearSS[SpellSlot.W] = mainMenu.Add("waveClearUseW", new CheckBox("Use W"));
-            mainMenu.AddGroupLabel("Harass");
-            harassSS[SpellSlot.W] = mainMenu.Add("harassUseW", new CheckBox("Use W"));
-            mainMenu.AddSeparator();
-            mainMenu.AddGroupLabel("Mana Options");
-            manaQ = mainMenu.Add("manaQ", new Slider("Min Mana % to Q"));
-            manaW = mainMenu.Add("manaW", new Slider("Min Mana % to W"));
-            manaR = mainMenu.Add("manaR", new Slider("Min Mana % to R"));
-            manaHarass = mainMenu.Add("manaHarass", new Slider("Min Mana % to Harass"));
+            harassMenu = mainMenu.AddSubMenu("Harass");
+            harassMenu.AddGroupLabel("Harass Options");
+            harassSS[SpellSlot.W] = harassMenu.Add("harassUseW", new CheckBox("Use W"));
+            manaMenu = mainMenu.AddSubMenu("Mana");
+            manaMenu.AddGroupLabel("Mana Options");
+            manaQ = manaMenu.Add("manaQ", new Slider("Min Mana % to Q"));
+            manaW = manaMenu.Add("manaW", new Slider("Min Mana % to W"));
+            manaR = manaMenu.Add("manaR", new Slider("Min Mana % to R"));
+            manaHarass = manaMenu.Add("manaHarass", new Slider("Min Mana % to Harass"));
             Game.OnTick += Game_OnTick;
             Chat.Print("dAshe By Darakath loaded.", Color.DarkBlue);
         }
