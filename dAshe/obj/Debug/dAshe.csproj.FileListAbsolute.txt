@@ -20,3 +20,6 @@ C:\Users\Darak\OneDrive\Documents\League\EloBuddy\Addons\dAshe\dAshe\bin\Debug\S
 C:\Users\Darak\OneDrive\Documents\League\EloBuddy\Addons\dAshe\dAshe\bin\Debug\SharpDX.Direct3D9.dll
 C:\Users\Darak\OneDrive\Documents\League\EloBuddy\Addons\dAshe\dAshe\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Darak\OneDrive\Documents\League\EloBuddy\Addons\dAshe\dAshe\obj\Debug\dAshe.csprojResolveAssemblyReference.cache
+C:\Users\darak\OneDrive\Documents\League\EloBuddy\Addons\EloBuddy\dAshe\bin\Debug\dAshe.exe.config
+C:\Users\darak\OneDrive\Documents\League\EloBuddy\Addons\EloBuddy\dAshe\obj\Debug\dAshe.exe
+C:\Users\darak\OneDrive\Documents\League\EloBuddy\Addons\EloBuddy\dAshe\obj\Debug\dAshe.pdb
