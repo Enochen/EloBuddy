@@ -1,4 +1,4 @@
-﻿namespace Skins_
+﻿namespace SkinsPlus
 {
     using System;
     using System.Collections.Generic;
