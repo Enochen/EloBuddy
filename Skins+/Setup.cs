@@ -8,17 +8,15 @@
     using EloBuddy.SDK.Menu;
     using EloBuddy.SDK.Menu.Values;
 
-    internal class MenuInterface
+    internal class Setup
     {
         #region Static Fields
 
-        private static readonly Dictionary<int, bool> ChampEnabled = new Dictionary<int, bool>();
+        public static readonly Dictionary<int, bool> ChampEnabled = new Dictionary<int, bool>();
 
-        private static readonly Dictionary<string, int> ChampSkins = new Dictionary<string, int>();
+        public static readonly Dictionary<string, int> ChampSkins = new Dictionary<string, int>();
 
-        private static readonly Dictionary<Obj_AI_Base, bool> Dead = new Dictionary<Obj_AI_Base, bool>();
-
-        private static readonly List<AIHeroClient> Heroes = new List<AIHeroClient>();
+        public static readonly List<AIHeroClient> Heroes = new List<AIHeroClient>();
 
         private static Menu menu, heroSubMenu;
 
@@ -40,7 +38,7 @@
                 {
                     Heroes.Add(hero);
 
-                    Dead.Add(hero, false);
+                    Renew.Dead.Add(hero, false);
 
                     ChampEnabled.Add(hero.NetworkId, false);
 
@@ -68,29 +66,7 @@
             {
                 Console.Write(e + " " + e.StackTrace);
             }
-            Game.OnUpdate += Renew;
-        }
-
-        #endregion
-
-        #region Methods
-
-        private static void Renew(EventArgs args)
-        {
-            foreach (var hero in Heroes)
-            {
-                if (hero.IsDead && !Dead[hero])
-                {
-                    Dead[hero] = true;
-                    continue;
-                }
-                if (hero.IsDead || !Dead[hero] || !ChampEnabled[hero.NetworkId])
-                {
-                    continue;
-                }
-                hero.SetSkin(hero.ChampionName, ChampSkins[hero.Name]);
-                Dead[hero] = false;
-            }
+            Game.OnUpdate += Re.New;
         }
 
         #endregion

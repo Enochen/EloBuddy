@@ -5,12 +5,10 @@
     internal class Program
     {
         #region Methods
-
         private static void Main()
         {
-            Loading.OnLoadingComplete += MenuInterface.OnGameLoad;
+            Loading.OnLoadingComplete += Setup.OnGameLoad;
         }
-
         #endregion
     }
 }
