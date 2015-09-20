@@ -21,7 +21,7 @@
             fMenu.AddLabel("A lot of code is taken from blacky's BlackFeeder :^)");
             fMenu.AddSeparator();
             fMenu.Add("FeedingActivated", new CheckBox("Feeding Activated"));
-            fMenu.Add("FeedingFeedMode", new Slider("FeedMode: (0-Mid, 1-Bot, 2-Top, 3-Random)", 0, 0, 3));
+            fMenu.Add("FeedingMode", new Slider("FeedMode: (0-Mid, 1-Bot, 2-Top, 3-Random)", 0, 0, 3));
 
             feMenu = fMenu.AddSubMenu("Feeding", "feedingmenu");
             feMenu.AddLabel("Feeding Options");

@@ -9,7 +9,7 @@
     using EloBuddy.SDK.Menu;
     using EloBuddy.SDK.Menu.Values;
 
-    using SRShopAI;
+    using FeederBuddy.SRShopAI;
 
     using SharpDX;
 
@@ -248,7 +248,7 @@
 
         private static void Feed()
         {
-            var feedingMode = Menu["FeedingFeedMode"].Cast<Slider>().CurrentValue;
+            var feedingMode = Menu["FeedingMode"].Cast<Slider>().CurrentValue;
             if (feedingMode == 3 && globalRand == -1)
             {
                 var rnd = new Random();
@@ -418,7 +418,7 @@
                 Feed();
             }
 
-            if (FeedMenu["SurrenderActivated"].Cast<CheckBox>().CurrentValue)
+            if (MiscMenu["SurrenderActivated"].Cast<CheckBox>().CurrentValue)
             {
                 Surrender();
             }
