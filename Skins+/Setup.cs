@@ -38,7 +38,7 @@
                 {
                     Heroes.Add(hero);
 
-                    Renew.Dead.Add(hero, false);
+                    Re.Dead.Add(hero, false);
 
                     ChampEnabled.Add(hero.NetworkId, false);
 
