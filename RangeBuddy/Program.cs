@@ -115,7 +115,7 @@
             foreach (var entry in TurretCache)
             {
                 var turret = entry.Value;
-                const int circlePadding = 20;
+                const int CirclePadding = 20;
                 if (turret != null && turret.IsValid && !turret.IsDead)
                 {
                     var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
@@ -126,7 +126,7 @@
                         {
                             Drawing.DrawCircle(
                                 tTarget.Position,
-                                tTarget.BoundingRadius + circlePadding,
+                                tTarget.BoundingRadius + CirclePadding,
                                 turret.IsAttackingPlayer ? dangerColor : safeColor);
                         }
                         if (tTarget != null && (tTarget.IsMe || (turret.IsAlly && tTarget is AIHeroClient)))
@@ -182,13 +182,6 @@
             aMenu.Add("a.a", new CheckBox("Draw Ally", false));
             aMenu.Add("a.e", new CheckBox("Draw Enemy", false));
 
-            tMenu = rMenu.AddSubMenu("Turret");
-            tMenu.Add("t.a", new CheckBox("Draw Ally", false));
-            tMenu.Add("t.e", new CheckBox("Draw Enemy", false));
-
-            sMenu = rMenu.AddSubMenu("Shop");
-            sMenu.Add("s.a", new CheckBox("Draw Ally", false));
-            sMenu.Add("s.e", new CheckBox("Draw Enemy", false));
             CacheTurrets();
             Drawing.OnDraw += OnDrawingDraw;
         }
