@@ -105,6 +105,7 @@
         {
             var drawAlly = tMenu["t.a"].Cast<CheckBox>().CurrentValue;
             var drawEnemy = tMenu["t.e"].Cast<CheckBox>().CurrentValue;
+            var thickness = rMenu["cT"].Cast<Slider>().CurrentValue;
             var dangerColor = System.Drawing.Color.Red;
             var safeColor = System.Drawing.Color.Red;
             if (!drawAlly && !drawEnemy)
@@ -136,11 +137,13 @@
                         {
                             
                             var alpha = distToTurret > trtRange ? (((trtRange + 500) - distToTurret) / 2) : 250;
-                            Drawing.DrawCircle(
+                            /*Drawing.DrawCircle(
                                 turret.Position,
                                 trtRange,
-                                System.Drawing.Color.FromArgb(30, 238, 232, 170));
-                            //Chat.Print("dist is " + distToTurret + "range is " + trtRange);
+                                System.Drawing.Color.FromArgb(alpha, 238, 232, 170));*/
+                            var color = new Color(238, 232, 170, alpha);
+                            new Circle(color, trtRange, thickness).Draw(turret.Position);
+                            
                         }
                     }
                 }
