@@ -198,7 +198,6 @@
 
             if (args.Animation.Contains("Spell1"))
             {
-                Chat.Say("spell");
                 LastQ = Environment.TickCount;
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) ||
                     Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ||
@@ -226,7 +225,6 @@
                 {
                     aaDelay = Player.AttackDelay * 100 + Game.Ping / 2f;
                 }
-                Chat.Say("aa");
                 Core.DelayAction(
                     () =>
                         {
