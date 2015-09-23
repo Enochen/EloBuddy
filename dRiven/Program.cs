@@ -198,13 +198,15 @@
 
             if (args.Animation.Contains("Spell1"))
             {
+                Chat.Say("spell");
                 LastQ = Environment.TickCount;
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) ||
                     Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ||
                     Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
                 {
-                    Core.DelayAction(delegate { EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }, 100);
+                    Core.DelayAction(delegate { EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttack, Game.CursorPos); }, 100);
                     Core.DelayAction(Orbwalker.ResetAutoAttack, (int)(100 + Player.AttackDelay * 100));
+                    //Orbwalker.ResetAutoAttack();
                 }
             }
 
@@ -213,15 +215,18 @@
                     Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) ||
                     Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)))
             {
+                
                 float aaDelay;
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
                 {
-                        aaDelay = Player.AttackDelay * 300 + Game.Ping / 2f;
+
+                    aaDelay = Player.AttackDelay * 100 + Game.Ping / 2f;
                 }
                 else
                 {
-                    aaDelay = Player.AttackDelay * 300 + Game.Ping / 2f;
+                    aaDelay = Player.AttackDelay * 100 + Game.Ping / 2f;
                 }
+                Chat.Say("aa");
                 Core.DelayAction(
                     () =>
                         {
@@ -230,10 +235,11 @@
                                  || (GetBool(hMenu, "q.h")
                                      && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)
                                      || (GetBool(fMenu, "q.f")
-                                         && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)))))
+                                         && Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)
+                                         || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)))))
 
                             {
-                                ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Q, LastTarget.Position); ;
+                                ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Q, LastTarget.Position);
                             }
                         
             }, (int)(aaDelay));
