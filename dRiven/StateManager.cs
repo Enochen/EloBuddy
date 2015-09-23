@@ -48,7 +48,6 @@
         {
             if (HeroManager.Enemies.Any(x => x.IsValidTarget(Program.W.Range)))
             {
-                Chat.Say("enemies");
                 Program.W.Cast();
             }
         }
@@ -63,7 +62,6 @@
                 {
                     return;
                 }
-                Chat.Say("yep");
                 RavenousHydra.Cast();
                 Tiamat.Cast();
             }

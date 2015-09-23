@@ -128,7 +128,6 @@
 
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            Chat.Say(CanU2.ToString());
             if (!sender.IsMe)
             {
                 return;
