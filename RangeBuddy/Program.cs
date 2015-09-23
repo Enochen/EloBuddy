@@ -182,6 +182,10 @@
             aMenu.Add("a.a", new CheckBox("Draw Ally", false));
             aMenu.Add("a.e", new CheckBox("Draw Enemy", false));
 
+            //tMenu = rMenu.AddSubMenu("Turret");
+            //tMenu.Add("t.a", new CheckBox("Draw Ally", false));
+            //tMenu.Add("t.e", new CheckBox("Draw Enemy", false));
+
             CacheTurrets();
             Drawing.OnDraw += OnDrawingDraw;
         }

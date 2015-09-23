@@ -48,11 +48,11 @@
 
         private static readonly Dictionary<SpellSlot, CheckBox> harassSS = new Dictionary<SpellSlot, CheckBox>();
 
+        private static readonly Dictionary<SpellSlot, CheckBox> waveClearSS = new Dictionary<SpellSlot, CheckBox>();
+
         private static Menu mainMenu, comboMenu, harassMenu, manaMenu;
 
         private static Slider manaQ, manaW, manaR, manaHarass;
-
-        private static readonly Dictionary<SpellSlot, CheckBox> waveClearSS = new Dictionary<SpellSlot, CheckBox>();
 
         #endregion
 
@@ -128,7 +128,7 @@
             mainMenu = MainMenu.AddMenu("dAshe", "dAsheMenu");
             mainMenu.AddGroupLabel("dAshe by Darakath - Enjoy the bugs");
             mainMenu.AddSeparator();
-            comboMenu = mainMenu.AddSubMenu("Combo");   
+            comboMenu = mainMenu.AddSubMenu("Combo");
             comboMenu.AddGroupLabel("Combo Options");
             comboSS[SpellSlot.Q] = comboMenu.Add("comboUseQ", new CheckBox("Use Q"));
             comboSS[SpellSlot.W] = comboMenu.Add("comboUseW", new CheckBox("Use W"));
