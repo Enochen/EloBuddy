@@ -129,7 +129,7 @@
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
                 }
-                ;
+                
             }
 
             if (spell.IsAutoAttack() && sender.IsMe && Q.IsReady()
