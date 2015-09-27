@@ -137,6 +137,7 @@
                     || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)
                     || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)))
             {
+                //Player.Spellbook.CastSpell(SpellSlot.Q, mainTarget.Position);
                 SetupQ(mTar);
             }
         }
