@@ -62,7 +62,7 @@
             CMenu.AddSeparator();
             CMenu.Add("r2", new Slider("Use R2 Health Percent", 10));
             CMenu.AddSeparator();
-            CMenu.Add("r1", new Slider("Use R1 Enemies", 2, 0, HeroManager.Enemies.Count));
+            CMenu.Add("r1", new Slider("Use R1 Enemies", 2, 0, 5));
 
             HMenu = Menu.AddSubMenu("Harass", "hMenu");
             HMenu.Add("q", new CheckBox("Use Q"));
@@ -104,7 +104,7 @@
                      { MinimumHitChance = HitChance.Medium };
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += OnSpellCast;
-            Chat.Print("redRiven Loaded");
+            Chat.Print("redRiven by Darakath Loaded");
         }
 
         public static void OnSpellCast(GameObject sender, GameObjectProcessSpellCastEventArgs args)
@@ -127,7 +127,8 @@
                 Orbwalker.ResetAutoAttack();
                 if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
                 {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
+                    Chat.Say("/d");
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, mainTarget);
                 }
                 
             }
