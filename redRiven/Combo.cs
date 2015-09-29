@@ -27,7 +27,7 @@
 
         #region Public Methods and Operators
 
-        public static double CalcDmg(Obj_AI_Base target, bool useR)
+        public static double CalcDmg(Obj_AI_Base target, bool useR, bool onlyR)
         {
             if (target != null)
             {
@@ -50,14 +50,17 @@
                 dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 2;
                 if (r2.IsReady() && useR)
                 {
-                    double health = 0;
-                    if (Riven.CanR2())
+                    double health = target.Health;
+                    if (!onlyR)
                     {
-                        health = target.Health - (dmg * 1.2);
-                    }
-                    else if (!Riven.CanR2())
-                    {
-                        health = target.Health - dmg;
+                        if (Riven.CanR2())
+                        {
+                            health = target.Health - (dmg * 1.2);
+                        }
+                        else if (!Riven.CanR2())
+                        {
+                            health = target.Health - dmg;
+                        }
                     }
                     var missinghealth = (target.MaxHealth - health) / target.MaxHealth > 0.75
                                             ? 0.75
@@ -158,7 +161,7 @@
                 var targetR = TargetSelector.GetTarget(200 + Riven.Player.BoundingRadius + 70, DamageType.Physical);
                 if (targetR.IsValidTarget() && !targetR.IsZombie)
                 {
-                    if (CalcDmg(targetR, false) < targetR.Health)
+                    if (CalcDmg(targetR, false, false) < targetR.Health)
                     {
                         r.Cast();
                     }
@@ -174,7 +177,7 @@
                 var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(r.Range) && !x.IsZombie && !x.IsMinion);
                 foreach (var target in targets)
                 {
-                    if (target.Health < CalcDmg(target, true))
+                    if (target.Health < CalcDmg(target, true, true))
                     {
                         Riven.Player.Spellbook.CastSpell(SpellSlot.R, target.Position);
                     }
