@@ -43,11 +43,11 @@
                 }
                 if (q.IsReady() && GetOption(Riven.CMenu, "q"))
                 {
-                    dmg = dmg + Riven.Player.GetSpellDamage(target, SpellSlot.Q) * (3 - Riven.QStacks)
-                          + Riven.Player.GetAutoAttackDamage(target) * (3 - Riven.QStacks)
+                    dmg = dmg + Riven.Player.GetSpellDamage(target, SpellSlot.Q) * 3
+                          + Riven.Player.GetAutoAttackDamage(target) * 3
                           * (1 + passivedmg[Riven.Player.Level / 3]);
                 }
-                dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 2;
+                dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 1;
                 if (r2.IsReady() && useR)
                 {
                     double health = target.Health;
@@ -116,6 +116,7 @@
 
         public static void DoCombo(bool useR = true)
         {
+            
             if (q.IsReady() && Orbwalker.CanMove && !Riven.Player.IsDashing()
                 && (GetOption(Riven.CMenu, "q") && useR || GetOption(Riven.HMenu, "q") && !useR))
             {
@@ -164,10 +165,12 @@
                     if (CalcDmg(targetR, false, false) < targetR.Health)
                     {
                         r.Cast();
+                        Chat.Print(1);
                     }
-                    if (Riven.Player.CountEnemiesInRange(800) >= GetOption(Riven.CMenu, "r1"))
+                    else if (Riven.Player.CountEnemiesInRange(800) >= GetOption(Riven.CMenu, "r1"))
                     {
                         r.Cast();
+                        Chat.Print(2);
                     }
                 }
             }
@@ -179,11 +182,13 @@
                 {
                     if (target.Health < CalcDmg(target, true, true))
                     {
-                        Riven.Player.Spellbook.CastSpell(SpellSlot.R, target.Position);
+                        r2.Cast(target);
+                        Chat.Print(3);
                     }
-                    if (target.Health / target.MaxHealth <= GetOption(Riven.CMenu, "r2"))
+                    else if (target.Health / target.MaxHealth <= GetOption(Riven.CMenu, "r2"))
                     {
-                        Riven.Player.Spellbook.CastSpell(SpellSlot.R, target.Position);
+                        r2.Cast(target);
+                        Chat.Print(4);
                     }
                 }
             }
