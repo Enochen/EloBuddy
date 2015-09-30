@@ -47,7 +47,7 @@
                           + Riven.Player.GetAutoAttackDamage(target) * 3
                           * (1 + passivedmg[Riven.Player.Level / 3]);
                 }
-                dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 1;
+                dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 2;
                 if (r2.IsReady() && useR)
                 {
                     double health = target.Health;
@@ -165,12 +165,10 @@
                     if (CalcDmg(targetR, false, false) < targetR.Health)
                     {
                         r.Cast();
-                        Chat.Print(1);
                     }
                     else if (Riven.Player.CountEnemiesInRange(800) >= GetOption(Riven.CMenu, "r1"))
                     {
                         r.Cast();
-                        Chat.Print(2);
                     }
                 }
             }
@@ -183,12 +181,10 @@
                     if (target.Health < CalcDmg(target, true, true))
                     {
                         r2.Cast(target);
-                        Chat.Print(3);
                     }
                     else if (target.Health / target.MaxHealth <= GetOption(Riven.CMenu, "r2"))
                     {
                         r2.Cast(target);
-                        Chat.Print(4);
                     }
                 }
             }
