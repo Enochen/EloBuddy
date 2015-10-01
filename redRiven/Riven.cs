@@ -153,30 +153,12 @@
             {
                 return;
             }
-            if (spell.Name.Contains("RivenTriCleave"))
-            {
-                /*Chat.Print("Difference is " + (Environment.TickCount - LastQ));
-                LastQ = Environment.TickCount;
-                WaitQ = false;
-                QStacks++;
-                if (QStacks > 2)
-                {
-                    QStacks = 0;
-                }
-                Orbwalker.ResetAutoAttack();
-                Chat.Say("/d");
-                if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
-                {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
-                }*/
-            }
 
             if (spell.IsAutoAttack() && sender.IsMe && (Q.IsReady(50))
                 && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)
                     || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)
                     || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)))
             {
-                //Player.Spellbook.CastSpell(SpellSlot.Q, mainTarget.Position);
                 SetupQ(mTar);
                 Orbwalker.ResetAutoAttack();
             }
