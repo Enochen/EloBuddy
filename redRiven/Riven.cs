@@ -12,6 +12,8 @@
 
     using SharpDX;
 
+    using Color = System.Drawing.Color;
+
     internal class Riven
     {
         #region Constants
@@ -38,10 +40,19 @@
 
         public static bool WaitQ;
 
-
         #endregion
 
         #region Public Methods and Operators
+
+        public static void Cancel()
+        {
+            EloBuddy.Player.DoEmote(Emote.Dance);
+            Orbwalker.ResetAutoAttack();
+            if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
+            {
+                EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
+            }
+        }
 
         public static bool CanR2()
         {
@@ -93,6 +104,27 @@
             MMenu.Add("q", new CheckBox("Keep Q"));
         }
 
+        public static void OnDraw(EventArgs args)
+        {
+            foreach (var unit in HeroManager.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
+            {
+                var offset = new Vector2(0, 10);
+                var damage = Combo.CalcDmg(unit, true, false);
+                if (damage > 0)
+                {
+                    var dmgPercent = ((unit.Health - damage) > 0 ? (unit.Health - damage) : 0) / unit.MaxHealth;
+                    var healthPercent = unit.Health / unit.MaxHealth;
+                    var start = new Vector2(
+                        (int)(unit.HPBarPosition.X + offset.X + dmgPercent * 104),
+                        (int)(unit.HPBarPosition.Y + offset.Y) - 5);
+                    var end = new Vector2(
+                        (int)(unit.HPBarPosition.X + offset.X + healthPercent * 104) + 1,
+                        (int)(unit.HPBarPosition.Y + offset.Y) - 5);
+                    Drawing.DrawLine(start, end, 9, Color.Gold);
+                }
+            }
+        }
+
         public static void OnGameLoad(EventArgs args)
         {
             if (Player.ChampionName != "Riven")
@@ -123,7 +155,6 @@
             }
             if (spell.Name.Contains("RivenTriCleave"))
             {
-
                 /*Chat.Print("Difference is " + (Environment.TickCount - LastQ));
                 LastQ = Environment.TickCount;
                 WaitQ = false;
@@ -138,7 +169,6 @@
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
                 }*/
-
             }
 
             if (spell.IsAutoAttack() && sender.IsMe && (Q.IsReady(50))
@@ -184,37 +214,9 @@
             WaitQ = true;
         }
 
-        public static void OnDraw(EventArgs args)
-        {
-            foreach (var unit in HeroManager.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
-            {
-                Vector2 offset = new Vector2(0, 10);
-                var damage = Combo.CalcDmg(unit, true, false);
-                if (damage > 0)
-                {
-                    var dmgPercent = ((unit.Health - damage) > 0 ? (unit.Health - damage) : 0) / unit.MaxHealth;
-                    var healthPercent = unit.Health / unit.MaxHealth;
-                    var start = new Vector2(
-                        (int)(unit.HPBarPosition.X + offset.X + dmgPercent * 104),
-                        (int)(unit.HPBarPosition.Y + offset.Y) - 5);
-                    var end = new Vector2(
-                        (int)(unit.HPBarPosition.X + offset.X + healthPercent * 104) + 1,
-                        (int)(unit.HPBarPosition.Y + offset.Y) - 5);
-                    Drawing.DrawLine(start, end, 9, System.Drawing.Color.Gold);
-                }
-            }
-        }
-
-        public static void Cancel()
-        {
-            EloBuddy.Player.DoEmote(Emote.Dance);
-            Orbwalker.ResetAutoAttack();
-            if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
-                EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
-            
-        }
-
         #endregion
+
+        #region Methods
 
         private static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
@@ -263,5 +265,7 @@
             }
             Core.DelayAction(Cancel, t);
         }
+
+        #endregion
     }
 }

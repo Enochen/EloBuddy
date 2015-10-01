@@ -44,8 +44,7 @@
                 if (q.IsReady() && GetOption(Riven.CMenu, "q"))
                 {
                     dmg = dmg + Riven.Player.GetSpellDamage(target, SpellSlot.Q) * 3
-                          + Riven.Player.GetAutoAttackDamage(target) * 3
-                          * (1 + passivedmg[Riven.Player.Level / 3]);
+                          + Riven.Player.GetAutoAttackDamage(target) * 3 * (1 + passivedmg[Riven.Player.Level / 3]);
                 }
                 dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 2;
                 if (r2.IsReady() && useR)
@@ -116,7 +115,6 @@
 
         public static void DoCombo(bool useR = true)
         {
-            
             if (q.IsReady() && Orbwalker.CanMove && !Riven.Player.IsDashing()
                 && (GetOption(Riven.CMenu, "q") && useR || GetOption(Riven.HMenu, "q") && !useR))
             {
