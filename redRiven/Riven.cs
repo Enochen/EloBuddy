@@ -1,6 +1,7 @@
 ﻿namespace redRiven
 {
     using System;
+    using System.Linq;
 
     using EloBuddy;
     using EloBuddy.SDK;
@@ -8,6 +9,8 @@
     using EloBuddy.SDK.Enumerations;
     using EloBuddy.SDK.Menu;
     using EloBuddy.SDK.Menu.Values;
+
+    using SharpDX;
 
     internal class Riven
     {
@@ -104,7 +107,9 @@
             R2 = new Spell.Skillshot(SpellSlot.R, 900, SkillShotType.Cone, 250, 1600, 125)
                      { MinimumHitChance = HitChance.Medium };
             Game.OnUpdate += OnUpdate;
+            Obj_AI_Base.OnPlayAnimation += OnPlayAnimation;
             Obj_AI_Base.OnSpellCast += OnSpellCast;
+            Drawing.OnEndScene += OnDraw;
             Chat.Print("redRiven by Darakath Loaded");
         }
 
@@ -118,6 +123,8 @@
             }
             if (spell.Name.Contains("RivenTriCleave"))
             {
+
+                /*Chat.Print("Difference is " + (Environment.TickCount - LastQ));
                 LastQ = Environment.TickCount;
                 WaitQ = false;
                 QStacks++;
@@ -126,21 +133,22 @@
                     QStacks = 0;
                 }
                 Orbwalker.ResetAutoAttack();
+                Chat.Say("/d");
                 if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
                 {
-                    Chat.Say("/d");
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, mainTarget);
-                }
-                
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
+                }*/
+
             }
 
-            if (spell.IsAutoAttack() && sender.IsMe && Q.IsReady()
+            if (spell.IsAutoAttack() && sender.IsMe && (Q.IsReady(50))
                 && (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)
                     || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)
                     || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)))
             {
                 //Player.Spellbook.CastSpell(SpellSlot.Q, mainTarget.Position);
                 SetupQ(mTar);
+                Orbwalker.ResetAutoAttack();
             }
         }
 
@@ -176,6 +184,84 @@
             WaitQ = true;
         }
 
+        public static void OnDraw(EventArgs args)
+        {
+            foreach (var unit in HeroManager.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
+            {
+                Vector2 offset = new Vector2(0, 10);
+                var damage = Combo.CalcDmg(unit, true, false);
+                if (damage > 0)
+                {
+                    var dmgPercent = ((unit.Health - damage) > 0 ? (unit.Health - damage) : 0) / unit.MaxHealth;
+                    var healthPercent = unit.Health / unit.MaxHealth;
+                    var start = new Vector2(
+                        (int)(unit.HPBarPosition.X + offset.X + dmgPercent * 104),
+                        (int)(unit.HPBarPosition.Y + offset.Y) - 5);
+                    var end = new Vector2(
+                        (int)(unit.HPBarPosition.X + offset.X + healthPercent * 104) + 1,
+                        (int)(unit.HPBarPosition.Y + offset.Y) - 5);
+                    Drawing.DrawLine(start, end, 9, System.Drawing.Color.Gold);
+                }
+            }
+        }
+
+        public static void Cancel()
+        {
+            EloBuddy.Player.DoEmote(Emote.Dance);
+            Orbwalker.ResetAutoAttack();
+            if (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.None))
+                EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, mainTarget);
+            
+        }
+
         #endregion
+
+        private static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+        {
+            if (!sender.IsMe || Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.None)
+            {
+                return;
+            }
+            var t = 0;
+            switch (args.Animation)
+            {
+                case "Spell1a":
+                    LastQ = Environment.TickCount;
+                    WaitQ = false;
+                    t = 291;
+                    QStacks++;
+                    break;
+                case "Spell1b":
+                    LastQ = Environment.TickCount;
+                    WaitQ = false;
+                    t = 291;
+                    QStacks++;
+                    break;
+                case "Spell1c":
+                    LastQ = Environment.TickCount;
+                    WaitQ = false;
+                    t = 393;
+                    QStacks++;
+                    break;
+                case "Spell2":
+                    t = 170;
+                    break;
+                case "Spell4a":
+                    t = 0;
+                    break;
+                case "Spell4b":
+                    t = 150;
+                    break;
+            }
+            if (QStacks > 2)
+            {
+                QStacks = 0;
+            }
+            if (t == 0)
+            {
+                return;
+            }
+            Core.DelayAction(Cancel, t);
+        }
     }
 }

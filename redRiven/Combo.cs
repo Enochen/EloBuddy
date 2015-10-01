@@ -162,7 +162,7 @@
                 var targetR = TargetSelector.GetTarget(200 + Riven.Player.BoundingRadius + 70, DamageType.Physical);
                 if (targetR.IsValidTarget() && !targetR.IsZombie)
                 {
-                    if (CalcDmg(targetR, false, false) < targetR.Health)
+                    if (!(CalcDmg(targetR, false, false) > targetR.Health))
                     {
                         r.Cast();
                     }
@@ -178,7 +178,7 @@
                 var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(r.Range) && !x.IsZombie && !x.IsMinion);
                 foreach (var target in targets)
                 {
-                    if (target.Health < CalcDmg(target, true, true))
+                    if (CalcDmg(target, true, true) > target.Health)
                     {
                         r2.Cast(target);
                     }
@@ -266,6 +266,7 @@
             if (q.IsReady() && !Riven.Player.IsRecalling && !Riven.Player.Spellbook.IsChanneling && !Riven.Player.IsDead
                 && Riven.QStacks != 0 && Environment.TickCount - Riven.LastQ >= 3650 && GetOption(Riven.MMenu, "q"))
             {
+                Chat.Print(1);
                 Riven.Player.Spellbook.CastSpell(SpellSlot.Q, Game.CursorPos);
             }
             else if (Riven.Player.IsDead || Environment.TickCount - Riven.LastQ >= 3651)
