@@ -1,9 +1,12 @@
 ﻿namespace PureTrundle
 {
+    using System;
     using System.Linq;
 
     using EloBuddy;
     using EloBuddy.SDK;
+    using EloBuddy.SDK.Enumerations;
+    using EloBuddy.SDK.Events;
 
     internal class States
     {
@@ -95,7 +98,7 @@
             }
         }
 
-        public static void DoCombo(bool useW, bool useE, bool useR, bool harass)
+        public static void DoCombo(bool useW, bool useR, bool harass)
         {
             var target = TargetSelector.GetTarget(Trundle.E.Range - Trundle.E.Radius / 2, DamageType.Physical);
 
@@ -119,13 +122,23 @@
             {
                 Trundle.R.Cast(target);
             }
-            if (Trundle.E.IsReady() && useE)
-            {
-                Trundle.E.Cast(target);
-            }
+
             if (Trundle.W.IsReady() && useW)
             {
                 Trundle.W.Cast(target);
+            }
+        }
+
+        public static void PillarBlock()
+        {
+            foreach (
+                var target in
+                    HeroManager.Enemies.Where(u => u.IsValidTarget() && u.Distance(Trundle.Player) < Trundle.E.Range && u != null && u.IsDashing()))
+            {
+                if (Trundle.E.GetPrediction(target).HitChance == HitChance.Dashing)
+                {
+                    Trundle.E.Cast(target);
+                }
             }
         }
     }
