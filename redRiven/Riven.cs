@@ -94,10 +94,15 @@
             MMenu = Menu.AddSubMenu("Misc", "mMenu");
             MMenu.Add("q", new CheckBox("Keep Q"));
             MMenu.Add("dr", new CheckBox("Draw R Range"));
+            MMenu.Add("hp", new CheckBox("Draw HP Indicator"));
         }
 
         public static void OnDraw(EventArgs args)
         {
+            if (!Combo.GetOption(MMenu, "hp"))
+            {
+                return;
+            }
             foreach (var unit in HeroManager.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
             {
                 var offset = new Vector2(0, 10);
