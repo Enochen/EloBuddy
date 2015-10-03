@@ -7,7 +7,6 @@
     using EloBuddy.SDK;
     using EloBuddy.SDK.Constants;
     using EloBuddy.SDK.Enumerations;
-    using EloBuddy.SDK.Events;
     using EloBuddy.SDK.Menu;
     using EloBuddy.SDK.Menu.Values;
     using EloBuddy.SDK.Rendering;
@@ -20,7 +19,7 @@
     {
         public static Spell.Targeted R;
 
-        public static Menu Menu, CMenu, HMenu, WMenu, JMenu, MMenu, DMenu, OMenu;
+        public static Menu Menu, CMenu, HMenu, WMenu, JMenu, MMenu, DMenu;
 
         public static AIHeroClient Player = ObjectManager.Player;
 
@@ -28,7 +27,7 @@
 
         public static Spell.Active Chomp;
 
-        private static readonly string version = "0.3";
+        private static readonly string version = "0.1";
 
         public static void CreateMenu()
         {
@@ -75,9 +74,6 @@
             DMenu.Add("E", new CheckBox("Draw E Range", false));
             DMenu.Add("R", new CheckBox("Draw R Range"));
             DMenu.Add("RD", new CheckBox("HP Bar Indicator (Q+R+AA+Items)"));
-
-            OMenu = Menu.AddSubMenu("Other", "oMenu");
-            OMenu.Add("GC", new CheckBox("Auto Anti-GapCloser", false));
         }
 
         public static void OnGameLoad(EventArgs args)
@@ -93,32 +89,34 @@
             R = new Spell.Targeted(SpellSlot.R, 700);
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += OnSpellCast;
-            Gapcloser.OnGapcloser += OnGapcloser;
-            //Interrupter.OnInterruptableSpell += OnInterruptableSpell;
             Drawing.OnEndScene += OnEndScene;
 
             Chat.Print("PureTrundle v" + version + " Loaded");
         }
 
-        public static void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        public static void OnSpellCast(GameObject sender, GameObjectProcessSpellCastEventArgs args)
         {
             var spell = args.SData;
             if (!sender.IsMe)
             {
                 return;
             }
-            if (spell.IsAutoAttack() && sender.IsMe && Chomp.IsReady() && !args.Target.IsDead
-                && States.CalcDmg((Obj_AI_Base)args.Target, true)
-                && ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)
-                     && Player.ManaPercent > GetOption(MMenu, "Q"))
-                    || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && States.UseQwc)
-                    || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) && States.UseQjf)
-                    || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)
-                        && Player.ManaPercent > GetOption(MMenu, "H"))))
+
+            if (!spell.IsAutoAttack() || !sender.IsMe || !Chomp.IsReady() || args.Target.IsDead
+                || !States.CalcDmg((Obj_AI_Base)args.Target, true)
+                || ((!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)
+                     || Player.ManaPercent <= GetOption(MMenu, "Q"))
+                    && (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) || !States.UseQwc)
+                    && (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) || !States.UseQjf)
+                    && (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)
+                        || Player.ManaPercent <= GetOption(MMenu, "H"))))
             {
-                Chomp.Cast();
-                Orbwalker.ResetAutoAttack();
+                return;
             }
+
+            Chomp.Cast();
+            Orbwalker.ResetAutoAttack();
+
             if ((!GetOption(WMenu, "TH")
                  || (!Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)
                      && !Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear)))
@@ -135,36 +133,6 @@
             else if (Item.HasItem(States.Tiamat) && Item.CanUseItem(States.Tiamat))
             {
                 Item.UseItem(States.Tiamat);
-            }
-        }
-
-        public static void OnGapcloser(Obj_AI_Base sender, Gapcloser.GapcloserEventArgs args)
-        {
-            if (!E.IsReady() || sender.Type != GameObjectType.AIHeroClient || args.End.Distance(Player.Position) > E.Range || sender.IsAlly || !GetOption(OMenu,"GC") || E.GetPrediction(sender).HitChance != HitChance.Dashing)
-            {
-                return;
-            }
-            //if (args.End.Distance(Player.Position) > args.Start.Distance(Player.Position))
-            {
-                E.Cast(args.End);
-            }
-            /*else if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Combo && GetOption(CMenu, "E"))
-                {
-                    E.Cast((Vector3)args.End.Extend(args.Start, ObjectManager.Player.BoundingRadius + (float)E.Width));
-                }
-                else
-                {
-                    E.Cast((Vector3)Player.Position.Extend(args.End, ObjectManager.Player.BoundingRadius + (float)E.Width));
-                }*/
-        }
-
-        public static void OnInterruptableSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
-        {
-            if (sender.IsEnemy && E.IsReady() && sender.Distance(Player) < E.Range && sender.Type == GameObjectType.AIHeroClient && args.DangerLevel == DangerLevel.High)
-            {
-                E.Cast(
-                    (Vector3)
-                    Player.Position.Extend(sender.Position, sender.Distance(ObjectManager.Player) + (float)E.Width / 2));
             }
         }
 
@@ -233,14 +201,13 @@
 
         public static void OnUpdate(EventArgs args)
         {
-            //States.PillarBlock();
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                States.DoCombo(GetOption(CMenu, "W"), GetOption(CMenu, "R"), false);
+                States.DoCombo(GetOption(CMenu, "W"), GetOption(CMenu, "E"), GetOption(CMenu, "R"), false);
             }
             else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
             {
-                States.DoCombo(GetOption(HMenu, "W"), false, true);
+                States.DoCombo(GetOption(HMenu, "W"), GetOption(HMenu, "E"), false, true);
             }
             else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)
                      || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
