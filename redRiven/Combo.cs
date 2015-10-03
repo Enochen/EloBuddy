@@ -1,6 +1,7 @@
 ﻿namespace redRiven
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using EloBuddy;
@@ -13,15 +14,15 @@
     {
         #region Static Fields
 
-        private static readonly Spell.Skillshot e = Riven.E;
+        private static readonly Spell.Skillshot E = Riven.E;
 
-        private static readonly Spell.Skillshot q = Riven.Q;
+        private static readonly Spell.Skillshot Q = Riven.Q;
 
-        private static readonly Spell.Active r = Riven.R;
+        private static readonly Spell.Active R = Riven.R;
 
-        private static readonly Spell.Skillshot r2 = Riven.R2;
+        private static readonly Spell.Skillshot R2 = Riven.R2;
 
-        private static readonly Spell.Active w = Riven.W;
+        private static readonly Spell.Active W = Riven.W;
 
         #endregion
 
@@ -29,84 +30,92 @@
 
         public static double CalcDmg(Obj_AI_Base target, bool useR, bool onlyR)
         {
-            if (target != null)
+            if (target == null)
             {
-                double dmg = 0;
-                double[] passivedmg = { 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5 };
-                if (UseItem(true, false))
-                {
-                    dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * 0.7;
-                }
-                if (w.IsReady() && GetOption(Riven.CMenu, "w"))
-                {
-                    dmg = dmg + Riven.Player.GetSpellDamage(target, SpellSlot.W);
-                }
-                if (q.IsReady() && GetOption(Riven.CMenu, "q"))
-                {
-                    dmg = dmg + Riven.Player.GetSpellDamage(target, SpellSlot.Q) * 3
-                          + Riven.Player.GetAutoAttackDamage(target) * 3 * (1 + passivedmg[Riven.Player.Level / 3]);
-                }
-                dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 2;
-                if (r2.IsReady() && useR)
-                {
-                    double health = target.Health;
-                    if (!onlyR)
-                    {
-                        if (Riven.CanR2())
-                        {
-                            health = target.Health - (dmg * 1.2);
-                        }
-                        else if (!Riven.CanR2())
-                        {
-                            health = target.Health - dmg;
-                        }
-                    }
-                    var missinghealth = (target.MaxHealth - health) / target.MaxHealth > 0.75
-                                            ? 0.75
-                                            : (target.MaxHealth - health) / target.MaxHealth;
-                    var pluspercent = missinghealth * (8.0 / 3.0);
-
-                    var rawdmg = new double[] { 80, 120, 160 }[r.Level - 1] + 0.6 * Riven.Player.FlatPhysicalDamageMod;
-                    return Riven.Player.CalculateDamageOnUnit(
-                        target,
-                        DamageType.Physical,
-                        (float)(rawdmg * (1 + pluspercent)));
-                }
-
-                return dmg;
+                return 0;
             }
-            return 0;
+
+            double dmg = 0;
+            double[] passivedmg = { 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5 };
+            if (UseItem(true, false))
+            {
+                dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * 0.7;
+            }
+
+            if (W.IsReady() && GetOption(Riven.CMenu, "w"))
+            {
+                dmg = dmg + Riven.Player.GetSpellDamage(target, SpellSlot.W);
+            }
+
+            if (Q.IsReady() && GetOption(Riven.CMenu, "q"))
+            {
+                dmg = dmg + Riven.Player.GetSpellDamage(target, SpellSlot.Q) * 3
+                      + Riven.Player.GetAutoAttackDamage(target) * 3 * (1 + passivedmg[Riven.Player.Level / 3]);
+            }
+
+            dmg = dmg + Riven.Player.GetAutoAttackDamage(target) * (1 + passivedmg[Riven.Player.Level / 3]) * 2;
+            if (R2.IsReady() && useR)
+            {
+                double health = target.Health;
+                if (!onlyR)
+                {
+                    if (Riven.CanR2())
+                    {
+                        health = target.Health - (dmg * 1.2);
+                    }
+                    else if (!Riven.CanR2())
+                    {
+                        health = target.Health - dmg;
+                    }
+                }
+
+                var missinghealth = (target.MaxHealth - health) / target.MaxHealth > 0.75
+                                        ? 0.75
+                                        : (target.MaxHealth - health) / target.MaxHealth;
+                var pluspercent = missinghealth * (8.0 / 3.0);
+
+                var rawdmg = new double[] { 80, 120, 160 }[R.Level - 1] + 0.6 * Riven.Player.FlatPhysicalDamageMod;
+                return Riven.Player.CalculateDamageOnUnit(
+                    target, 
+                    DamageType.Physical, 
+                    (float)(rawdmg * (1 + pluspercent)));
+            }
+
+            return dmg;
         }
 
         public static void Clear()
         {
             var minion =
-                EntityManager.GetLaneMinions(EntityManager.UnitTeam.Enemy, Riven.Player.Position.To2D(), w.Range)
+                EntityManager.GetLaneMinions(EntityManager.UnitTeam.Enemy, Riven.Player.Position.To2D(), W.Range)
                     .OrderByDescending(x => 1 - x.Distance(Riven.Player.Position))
                     .FirstOrDefault();
             var monster =
-                EntityManager.GetJungleMonsters(Riven.Player.Position.To2D(), w.Range)
+                EntityManager.GetJungleMonsters(Riven.Player.Position.To2D(), W.Range)
                     .OrderByDescending(x => 1 - x.Distance(Riven.Player.Position))
                     .FirstOrDefault();
 
-            if (minion != null && Riven.Player.Distance(minion) <= w.Range && w.IsReady() && Orbwalker.CanMove
+            if (minion != null && Riven.Player.Distance(minion) <= W.Range && W.IsReady() && Orbwalker.CanMove
                 && GetOption(Riven.WMenu, "w"))
             {
                 UseItem(true, true);
-                w.Cast();
+                W.Cast();
             }
-            if (monster != null && Riven.Player.Distance(monster) <= w.Range && w.IsReady() && Orbwalker.CanMove
+
+            if (monster != null && Riven.Player.Distance(monster) <= W.Range && W.IsReady() && Orbwalker.CanMove
                 && GetOption(Riven.JMenu, "w"))
             {
                 UseItem(true, true);
-                w.Cast();
+                W.Cast();
             }
-            if (minion != null && Riven.Player.Distance(minion) <= w.Range && e.IsReady() && Orbwalker.CanMove
+
+            if (minion != null && Riven.Player.Distance(minion) <= W.Range && E.IsReady() && Orbwalker.CanMove
                 && GetOption(Riven.WMenu, "e"))
             {
                 Riven.Player.Spellbook.CastSpell(SpellSlot.E, minion.Position);
             }
-            if (monster != null && Riven.Player.Distance(monster) <= w.Range && e.IsReady() && Orbwalker.CanMove
+
+            if (monster != null && Riven.Player.Distance(monster) <= W.Range && E.IsReady() && Orbwalker.CanMove
                 && GetOption(Riven.JMenu, "e"))
             {
                 Riven.Player.Spellbook.CastSpell(SpellSlot.E, monster.Position);
@@ -115,7 +124,7 @@
 
         public static void DoCombo(bool useR = true)
         {
-            if (q.IsReady() && Orbwalker.CanMove && !Riven.Player.IsDashing()
+            if (Q.IsReady() && Orbwalker.CanMove && !Riven.Player.IsDashing()
                 && (GetOption(Riven.CMenu, "q") && useR || GetOption(Riven.HMenu, "q") && !useR))
             {
                 var target =
@@ -124,65 +133,68 @@
                         .OrderBy(x => x.Distance(Game.CursorPos))
                         .FirstOrDefault(x => x.IsEnemy);
 
-                if (!Riven.Player.IsDashing() && Environment.TickCount - Riven.LastQ >= 1000 && target.IsValidTarget())
+                if (!Riven.Player.IsDashing() && Environment.TickCount - Riven.LastQ >= 1000 && target.IsValidTarget() && target != null)
                 {
-                    if (Riven.Player.AttackRange + q.Range >= Riven.Player.Distance(target.Position)
+                    if (Riven.Player.AttackRange + Q.Range >= Riven.Player.Distance(target.Position)
                         && !Riven.Player.IsInAutoAttackRange(target))
                     {
                         Riven.Player.Spellbook.CastSpell(SpellSlot.Q, target.Position);
                     }
                 }
             }
-            if (w.IsReady() && Orbwalker.CanMove
+
+            if (W.IsReady() && Orbwalker.CanMove
                 && (GetOption(Riven.CMenu, "w") && useR || GetOption(Riven.HMenu, "w") && !useR))
             {
                 var targets =
                     HeroManager.Enemies.Where(
-                        x => x.IsValidTarget() && !x.IsZombie && Riven.Player.Distance(x) <= w.Range);
+                        x => x.IsValidTarget() && !x.IsZombie && Riven.Player.Distance(x) <= W.Range);
                 if (targets.Any() && Riven.QStacks == 0)
                 {
                     UseItem(true, true);
-                    w.Cast();
+                    W.Cast();
                 }
             }
-            if (e.IsReady() && Orbwalker.CanMove
+
+            if (E.IsReady() && Orbwalker.CanMove
                 && (GetOption(Riven.CMenu, "e") && useR || GetOption(Riven.HMenu, "e") && !useR))
             {
                 var target = TargetSelector.GetTarget(325 + Riven.Player.AttackRange + 70, DamageType.Physical);
                 if (target.IsValidTarget() && !target.IsZombie && Riven.QStacks == 0
-                    && e.Range > Riven.Player.Distance(target.Position))
+                    && E.Range > Riven.Player.Distance(target.Position))
                 {
                     Riven.Player.Spellbook.CastSpell(SpellSlot.E, target.Position);
                 }
             }
-            if (r.IsReady() && useR && !Riven.CanR2() && GetOption(Riven.CMenu, "r"))
+
+            if (R.IsReady() && useR && !Riven.CanR2() && GetOption(Riven.CMenu, "r"))
             {
                 var targetR = TargetSelector.GetTarget(200 + Riven.Player.BoundingRadius + 70, DamageType.Physical);
                 if (targetR.IsValidTarget() && !targetR.IsZombie)
                 {
                     if (!(CalcDmg(targetR, false, false) > targetR.Health))
                     {
-                        r.Cast();
+                        R.Cast();
                     }
                     else if (Riven.Player.CountEnemiesInRange(800) >= GetOption(Riven.CMenu, "r1"))
                     {
-                        r.Cast();
+                        R.Cast();
                     }
                 }
             }
 
-            if (r2.IsReady() && useR && Riven.CanR2() && GetOption(Riven.CMenu, "r"))
+            if (R2.IsReady() && useR && Riven.CanR2() && GetOption(Riven.CMenu, "r"))
             {
-                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(r.Range) && !x.IsZombie && !x.IsMinion);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsZombie && !x.IsMinion);
                 foreach (var target in targets)
                 {
                     if (CalcDmg(target, true, true) > target.Health)
                     {
-                        r2.Cast(target);
+                        R2.Cast(target);
                     }
                     else if (target.Health / target.MaxHealth <= GetOption(Riven.CMenu, "r2"))
                     {
-                        r2.Cast(target);
+                        R2.Cast(target);
                     }
                 }
             }
@@ -194,10 +206,12 @@
             {
                 return menu[option].Cast<CheckBox>().CurrentValue;
             }
+
             if (menu[option] is Slider)
             {
                 return menu[option].Cast<Slider>().CurrentValue;
             }
+
             return null;
         }
 
@@ -213,6 +227,7 @@
                         {
                             Item.UseItem((int)ItemId.Tiamat_Melee_Only);
                         }
+
                         if (Item.HasItem((int)ItemId.Ravenous_Hydra_Melee_Only))
                         {
                             Item.UseItem((int)ItemId.Ravenous_Hydra_Melee_Only);
@@ -249,6 +264,7 @@
                     return false;
                 }
             }
+
             return false;
         }
 
@@ -256,12 +272,13 @@
         {
             var targets =
                 ObjectManager.Get<Obj_AI_Base>()
-                    .Where(x => x.IsValidTarget() && !x.IsZombie && Riven.Player.Distance(x) <= q.Range);
+                    .Where(x => x.IsValidTarget() && !x.IsZombie && Riven.Player.Distance(x) <= Q.Range);
             if (Riven.WaitQ && targets.Any())
             {
                 Riven.Player.Spellbook.CastSpell(SpellSlot.Q, Riven.mainTarget.Position);
             }
-            if (q.IsReady() && !Riven.Player.IsRecalling && !Riven.Player.Spellbook.IsChanneling && !Riven.Player.IsDead
+
+            if (Q.IsReady() && !Riven.Player.IsRecalling && !Riven.Player.Spellbook.IsChanneling && !Riven.Player.IsDead
                 && Riven.QStacks != 0 && Environment.TickCount - Riven.LastQ >= 3650 && GetOption(Riven.MMenu, "q"))
             {
                 Chat.Print(1);

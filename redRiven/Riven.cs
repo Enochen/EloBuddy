@@ -9,6 +9,7 @@
     using EloBuddy.SDK.Enumerations;
     using EloBuddy.SDK.Menu;
     using EloBuddy.SDK.Menu.Values;
+    using EloBuddy.SDK.Rendering;
 
     using SharpDX;
 
@@ -16,15 +17,9 @@
 
     internal class Riven
     {
-        #region Constants
-
         public const string R1Name = "RivenFengShuiEngine";
 
         public const string R2Name = "rivenizunablade";
-
-        #endregion
-
-        #region Static Fields
 
         public static GameObject mainTarget;
 
@@ -39,10 +34,6 @@
         public static Spell.Active W, R;
 
         public static bool WaitQ;
-
-        #endregion
-
-        #region Public Methods and Operators
 
         public static void Cancel()
         {
@@ -102,6 +93,7 @@
 
             MMenu = Menu.AddSubMenu("Misc", "mMenu");
             MMenu.Add("q", new CheckBox("Keep Q"));
+            MMenu.Add("dr", new CheckBox("Draw R Range"));
         }
 
         public static void OnDraw(EventArgs args)
@@ -123,6 +115,12 @@
                     Drawing.DrawLine(start, end, 9, Color.Gold);
                 }
             }
+            if (!Combo.GetOption(MMenu, "dr"))
+            {
+                return;
+            }
+            var r2Range = new Circle(new ColorBGRA(138, 43, 226, 255), R2.Range);
+            r2Range.Draw(Player.Position);
         }
 
         public static void OnGameLoad(EventArgs args)
@@ -196,10 +194,6 @@
             WaitQ = true;
         }
 
-        #endregion
-
-        #region Methods
-
         private static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
             if (!sender.IsMe || Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.None)
@@ -245,9 +239,7 @@
             {
                 return;
             }
-            Core.DelayAction(Cancel, t);
+            Core.DelayAction(Cancel, t - Game.Ping);
         }
-
-        #endregion
     }
 }
