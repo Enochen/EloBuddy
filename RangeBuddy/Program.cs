@@ -15,14 +15,9 @@
 
     internal class Program
     {
-        #region Constants
         private const float ExpRange = 1350f;
 
-        private static float trtRange = 875f + ObjectManager.Player.BoundingRadius;
-
-        #endregion
-
-        #region Static Fields
+        private static readonly float TrtRange = 875f + ObjectManager.Player.BoundingRadius;
 
         private static Menu rMenu, eMenu, aMenu, tMenu, sMenu;
 
@@ -30,18 +25,11 @@
 
         private static readonly Dictionary<int, AttackableUnit> TurretTarget = new Dictionary<int, AttackableUnit>();
 
-        #endregion
-
-        #region Methods
-
         private static void CacheTurrets()
         {
-            foreach (var obj in ObjectManager.Get<Obj_AI_Turret>())
+            foreach (var obj in ObjectManager.Get<Obj_AI_Turret>().Where(obj => !TurretCache.ContainsKey(obj.NetworkId))
+                )
             {
-                if (TurretCache.ContainsKey(obj.NetworkId))
-                {
-                    continue;
-                }
                 TurretCache.Add(obj.NetworkId, obj);
                 TurretTarget.Add(obj.NetworkId, null);
             }
@@ -87,27 +75,22 @@
             {
                 return;
             }
-            foreach (
-                var hero in
-                    HeroManager.AllHeroes.Where(hero => !hero.IsDead && hero.IsVisible)
-                        .Where(
-                            hero =>
-                            (hero.IsAlly && drawAlly || hero.IsMe && drawSelf || hero.IsEnemy && drawEnemy)
-                            && !(hero.IsMe && !drawSelf) && hero.VisibleOnScreen))
+            foreach (var hero in
+                HeroManager.AllHeroes.Where(hero => !hero.IsDead && hero.IsVisible)
+                    .Where(
+                        hero =>
+                        (hero.IsAlly && drawAlly || hero.IsMe && drawSelf || hero.IsEnemy && drawEnemy)
+                        && !(hero.IsMe && !drawSelf) && hero.VisibleOnScreen))
             {
                 new Circle(Color.Gray, ExpRange, thickness).Draw(hero.Position);
-                //Drawing.DrawCircle(hero.Position, ExpRange, System.Drawing.Color.Gray);
             }
         }
-        
 
         private static void DrawTurret()
         {
             var drawAlly = tMenu["t.a"].Cast<CheckBox>().CurrentValue;
             var drawEnemy = tMenu["t.e"].Cast<CheckBox>().CurrentValue;
             var thickness = rMenu["cT"].Cast<Slider>().CurrentValue;
-            var dangerColor = System.Drawing.Color.Red;
-            var safeColor = System.Drawing.Color.Red;
             if (!drawAlly && !drawEnemy)
             {
                 return;
@@ -115,42 +98,25 @@
             foreach (var entry in TurretCache)
             {
                 var turret = entry.Value;
-                const int CirclePadding = 20;
-                if (turret != null && turret.IsValid && !turret.IsDead)
+                if (turret == null || !turret.IsValid || turret.IsDead)
                 {
-                    var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
-                    if (distToTurret < trtRange + 1500)
-                    {
-                        var tTarget = TurretTarget[turret.NetworkId];
-                        if (tTarget.IsValidTarget(float.MaxValue))
-                        {
-                            Drawing.DrawCircle(
-                                tTarget.Position,
-                                tTarget.BoundingRadius + CirclePadding,
-                                turret.IsAttackingPlayer ? dangerColor : safeColor);
-                        }
-                        if (tTarget != null && (tTarget.IsMe || (turret.IsAlly && tTarget is AIHeroClient)))
-                        {
-                            Drawing.DrawCircle(turret.Position, trtRange, dangerColor);
-                        }
-                        else
-                        {
-                            
-                            var alpha = distToTurret > trtRange ? (((trtRange + 500) - distToTurret) / 2) : 250;
-                            /*Drawing.DrawCircle(
-                                turret.Position,
-                                trtRange,
-                                System.Drawing.Color.FromArgb(alpha, 238, 232, 170));*/
-                            var color = new Color(238, 232, 170, alpha);
-                            new Circle(color, trtRange, thickness).Draw(turret.Position);
-                            
-                        }
-                    }
+                    TurretCache.Remove(entry.Key);
                 }
                 else
                 {
-                    TurretCache.Remove(entry.Key);
-                    continue;
+                    ColorBGRA color = turret.IsAlly ? Color.Green : Color.Yellow;
+
+                    var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
+                    if (!(distToTurret < TrtRange + 1500) || !turret.IsValidTarget())
+                    {
+                        continue;
+                    }
+
+                    if (distToTurret <= turret.AttackRange)
+                    {
+                        color = Color.Red;
+                    }
+                    new Circle(color, TrtRange, thickness).Draw(turret.Position);
                 }
             }
         }
@@ -182,14 +148,12 @@
             aMenu.Add("a.a", new CheckBox("Draw Ally", false));
             aMenu.Add("a.e", new CheckBox("Draw Enemy", false));
 
-            //tMenu = rMenu.AddSubMenu("Turret");
-            //tMenu.Add("t.a", new CheckBox("Draw Ally", false));
-            //tMenu.Add("t.e", new CheckBox("Draw Enemy", false));
+            tMenu = rMenu.AddSubMenu("Turret");
+            tMenu.Add("t.a", new CheckBox("Draw Ally", false));
+            tMenu.Add("t.e", new CheckBox("Draw Enemy", false));
 
             CacheTurrets();
             Drawing.OnDraw += OnDrawingDraw;
         }
-
-        #endregion
     }
 }
