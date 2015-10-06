@@ -116,7 +116,7 @@
                         continue;
                     }
                     ColorBGRA color = turret.IsAlly ? Color.Green : Color.Yellow;
-                    if (distToTurret <= TrtRange)
+                    if (distToTurret <= TrtRange && !turretIsAttackingMe)
                     {
                         color = Color.Orange;
                     }
