@@ -23,8 +23,6 @@
 
         private static readonly Dictionary<int, Obj_AI_Turret> TurretCache = new Dictionary<int, Obj_AI_Turret>();
 
-        private static readonly Dictionary<int, AttackableUnit> TurretTarget = new Dictionary<int, AttackableUnit>();
-
         private static Obj_AI_Base currentTurret = ObjectManager.Player;
 
         private static bool turretIsAttackingMe;
@@ -35,7 +33,6 @@
                 )
             {
                 TurretCache.Add(obj.NetworkId, obj);
-                TurretTarget.Add(obj.NetworkId, null);
             }
         }
 
@@ -116,7 +113,7 @@
                         continue;
                     }
                     ColorBGRA color = turret.IsAlly ? Color.Green : Color.Yellow;
-                    if (distToTurret <= TrtRange && !turretIsAttackingMe)
+                    if (distToTurret <= TrtRange && turret.IsEnemy)
                     {
                         color = Color.Orange;
                     }
