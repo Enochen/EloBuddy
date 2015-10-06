@@ -25,6 +25,10 @@
 
         private static readonly Dictionary<int, AttackableUnit> TurretTarget = new Dictionary<int, AttackableUnit>();
 
+        private static Obj_AI_Base currentTurret = ObjectManager.Player;
+
+        private static bool turretIsAttackingMe;
+
         private static void CacheTurrets()
         {
             foreach (var obj in ObjectManager.Get<Obj_AI_Turret>().Where(obj => !TurretCache.ContainsKey(obj.NetworkId))
@@ -55,7 +59,9 @@
             {
                 var radius = hero.BoundingRadius + hero.AttackRange
                              + (hero.IsAlly
-                                    ? EntityManager.Heroes.Enemies.Select(e => e.BoundingRadius).DefaultIfEmpty(0).Average()
+                                    ? EntityManager.Heroes.Enemies.Select(e => e.BoundingRadius)
+                                          .DefaultIfEmpty(0)
+                                          .Average()
                                     : ObjectManager.Player.BoundingRadius);
                 if (hero.VisibleOnScreen)
                 {
@@ -110,6 +116,10 @@
                         continue;
                     }
                     ColorBGRA color = turret.IsAlly ? Color.Green : Color.Yellow;
+                    if (distToTurret <= TrtRange)
+                    {
+                        color = Color.Orange;
+                    }
                     if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe)
                     {
                         color = Color.Red;
@@ -156,17 +166,13 @@
             Drawing.OnDraw += OnDrawingDraw;
         }
 
-        private static Obj_AI_Base currentTurret = ObjectManager.Player;
-
-        private static bool turretIsAttackingMe;
-
         private static void OnTick(EventArgs args)
         {
-                if (currentTurret.Distance(ObjectManager.Player) <= TrtRange || currentTurret.IsAlly
-                    && !currentTurret.IsDead)
-                {
-                    return;
-                }
+            if (currentTurret.Distance(ObjectManager.Player) <= TrtRange
+                || currentTurret.IsAlly && !currentTurret.IsDead)
+            {
+                return;
+            }
             turretIsAttackingMe = false;
         }
 
@@ -176,10 +182,6 @@
             {
                 turretIsAttackingMe = true;
                 currentTurret = sender;
-            }
-            else //if(args.Target.IsAlly)
-            {
-                //turretIsAttackingMe = false;
             }
         }
     }
