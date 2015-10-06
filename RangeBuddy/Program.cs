@@ -47,7 +47,7 @@
                 return;
             }
             foreach (var hero in
-                HeroManager.AllHeroes.Where(hero => !hero.IsDead && hero.IsVisible)
+                EntityManager.Heroes.AllHeroes.Where(hero => !hero.IsDead && hero.IsVisible)
                     .Where(
                         hero =>
                         (hero.IsAlly && drawAlly || hero.IsMe && drawSelf || hero.IsEnemy && drawEnemy)
@@ -55,7 +55,7 @@
             {
                 var radius = hero.BoundingRadius + hero.AttackRange
                              + (hero.IsAlly
-                                    ? HeroManager.Enemies.Select(e => e.BoundingRadius).DefaultIfEmpty(0).Average()
+                                    ? EntityManager.Heroes.Enemies.Select(e => e.BoundingRadius).DefaultIfEmpty(0).Average()
                                     : ObjectManager.Player.BoundingRadius);
                 if (hero.VisibleOnScreen)
                 {
@@ -76,7 +76,7 @@
                 return;
             }
             foreach (var hero in
-                HeroManager.AllHeroes.Where(hero => !hero.IsDead && hero.IsVisible)
+                EntityManager.Heroes.AllHeroes.Where(hero => !hero.IsDead && hero.IsVisible)
                     .Where(
                         hero =>
                         (hero.IsAlly && drawAlly || hero.IsMe && drawSelf || hero.IsEnemy && drawEnemy)
@@ -104,15 +104,13 @@
                 }
                 else
                 {
-                    ColorBGRA color = turret.IsAlly ? Color.Green : Color.Yellow;
-
                     var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
                     if (!(distToTurret < TrtRange + 1500) || !turret.IsValidTarget())
                     {
                         continue;
                     }
-
-                    if (distToTurret <= turret.AttackRange)
+                    ColorBGRA color = turret.IsAlly ? Color.Green : Color.Yellow;
+                    if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe)
                     {
                         color = Color.Red;
                     }
@@ -153,7 +151,36 @@
             tMenu.Add("t.e", new CheckBox("Draw Enemy", false));
 
             CacheTurrets();
+            Game.OnTick += OnTick;
+            Obj_AI_Base.OnBasicAttack += OnTurretAttack;
             Drawing.OnDraw += OnDrawingDraw;
+        }
+
+        private static Obj_AI_Base currentTurret = ObjectManager.Player;
+
+        private static bool turretIsAttackingMe;
+
+        private static void OnTick(EventArgs args)
+        {
+                if (currentTurret.Distance(ObjectManager.Player) <= TrtRange || currentTurret.IsAlly
+                    && !currentTurret.IsDead)
+                {
+                    return;
+                }
+            turretIsAttackingMe = false;
+        }
+
+        private static void OnTurretAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender is Obj_AI_Turret && args.Target.IsMe)
+            {
+                turretIsAttackingMe = true;
+                currentTurret = sender;
+            }
+            else //if(args.Target.IsAlly)
+            {
+                //turretIsAttackingMe = false;
+            }
         }
     }
 }

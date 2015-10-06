@@ -81,12 +81,12 @@
 
         public static void Clear()
         {
-            var minion = EntityManager.GetLaneMinions(
+            var minion = EntityManager.MinionsAndMonsters.GetLaneMinions(
                 EntityManager.UnitTeam.Enemy,
-                Trundle.Player.Position.To2D(),
+                Trundle.Player.Position,
                 Trundle.Player.AttackRange);
 
-            var monster = EntityManager.GetJungleMonsters(Trundle.Player.Position.To2D(), Trundle.Player.AttackRange);
+            var monster = EntityManager.MinionsAndMonsters.GetJungleMonsters(Trundle.Player.Position, Trundle.Player.AttackRange);
 
             UseQwc = Trundle.Player.ManaPercent > Trundle.GetOption(Trundle.MMenu, "WC");
             UseQjf = Trundle.Player.ManaPercent > Trundle.GetOption(Trundle.MMenu, "JF");
@@ -133,7 +133,7 @@
         {
             foreach (
                 var target in
-                    HeroManager.Enemies.Where(u => u.IsValidTarget() && u.Distance(Trundle.Player) < Trundle.E.Range && u != null && u.IsDashing()))
+                    EntityManager.Heroes.Enemies.Where(u => u.IsValidTarget() && u.Distance(Trundle.Player) < Trundle.E.Range && u != null && u.IsDashing()))
             {
                 if (Trundle.E.GetPrediction(target).HitChance == HitChance.Dashing)
                 {

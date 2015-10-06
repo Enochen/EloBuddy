@@ -34,7 +34,7 @@
             menu.AddLabel("Use the Submenus to Change Skins");
             try
             {
-                foreach (var hero in HeroManager.AllHeroes)
+                foreach (var hero in EntityManager.Heroes.AllHeroes)
                 {
                     Heroes.Add(hero);
 

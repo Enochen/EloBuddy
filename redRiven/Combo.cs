@@ -87,11 +87,11 @@
         public static void Clear()
         {
             var minion =
-                EntityManager.GetLaneMinions(EntityManager.UnitTeam.Enemy, Riven.Player.Position.To2D(), W.Range)
+                EntityManager.MinionsAndMonsters.GetLaneMinions(EntityManager.UnitTeam.Enemy, Riven.Player.Position, W.Range)
                     .OrderByDescending(x => 1 - x.Distance(Riven.Player.Position))
                     .FirstOrDefault();
             var monster =
-                EntityManager.GetJungleMonsters(Riven.Player.Position.To2D(), W.Range)
+                EntityManager.MinionsAndMonsters.GetJungleMonsters(Riven.Player.Position, W.Range)
                     .OrderByDescending(x => 1 - x.Distance(Riven.Player.Position))
                     .FirstOrDefault();
 
@@ -128,7 +128,7 @@
                 && (GetOption(Riven.CMenu, "q") && useR || GetOption(Riven.HMenu, "q") && !useR))
             {
                 var target =
-                    HeroManager.Enemies.Where(
+                    EntityManager.Heroes.Enemies.Where(
                         x => x.Distance(Game.CursorPos) <= 375 && x.Distance(Riven.Player.ServerPosition) <= 1200)
                         .OrderBy(x => x.Distance(Game.CursorPos))
                         .FirstOrDefault(x => x.IsEnemy);
@@ -147,7 +147,7 @@
                 && (GetOption(Riven.CMenu, "w") && useR || GetOption(Riven.HMenu, "w") && !useR))
             {
                 var targets =
-                    HeroManager.Enemies.Where(
+                    EntityManager.Heroes.Enemies.Where(
                         x => x.IsValidTarget() && !x.IsZombie && Riven.Player.Distance(x) <= W.Range);
                 if (targets.Any() && Riven.QStacks == 0)
                 {
@@ -185,7 +185,7 @@
 
             if (R2.IsReady() && useR && Riven.CanR2() && GetOption(Riven.CMenu, "r"))
             {
-                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsZombie && !x.IsMinion);
+                var targets = EntityManager.Heroes.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsZombie && !x.IsMinion);
                 foreach (var target in targets)
                 {
                     if (CalcDmg(target, true, true) > target.Health)

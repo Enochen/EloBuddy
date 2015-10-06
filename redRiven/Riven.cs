@@ -103,7 +103,7 @@
             {
                 return;
             }
-            foreach (var unit in HeroManager.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
+            foreach (var unit in EntityManager.Heroes.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
             {
                 var offset = new Vector2(0, 10);
                 var damage = Combo.CalcDmg(unit, true, false);
