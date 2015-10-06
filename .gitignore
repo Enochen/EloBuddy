@@ -224,3 +224,4 @@ pip-log.txt
 *.StyleCop
 *.cache
 dAshe/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+*.cache
