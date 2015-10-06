@@ -225,3 +225,5 @@ pip-log.txt
 *.cache
 dAshe/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 *.cache
+*.cache
+dAshe/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
