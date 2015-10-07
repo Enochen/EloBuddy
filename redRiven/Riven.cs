@@ -145,7 +145,7 @@
             Obj_AI_Base.OnPlayAnimation += OnPlayAnimation;
             Obj_AI_Base.OnSpellCast += OnSpellCast;
             Drawing.OnEndScene += OnDraw;
-            Chat.Print("redRiven by Darakath Loaded");
+            //Chat.Print("redRiven by Darakath Loaded");
         }
 
         public static void OnSpellCast(GameObject sender, GameObjectProcessSpellCastEventArgs args)
