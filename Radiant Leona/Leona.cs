@@ -58,6 +58,7 @@
 
             OMenu = Menu.AddSubMenu("Other", "oMenu");
             OMenu.Add("G", new CheckBox("Auto QAA on Gapcloser"));
+            OMenu.Add("C", new CheckBox("Auto AA Cancel With Q on Champions"));
         }
 
         public static void OnGameLoad(EventArgs args)
@@ -72,13 +73,24 @@
             E = new Spell.Skillshot(SpellSlot.E, 875, SkillShotType.Linear, 250, 2000, 70);
             R = new Spell.Skillshot(SpellSlot.R, 1200, SkillShotType.Circular, 1000, int.MaxValue, 250);
             R2 = new Spell.Skillshot(SpellSlot.R, 1200, SkillShotType.Circular, 1000, int.MaxValue, 100);
-            E.MinimumHitChance = HitChance.Medium;
+            E.MinimumHitChance = HitChance.High;
             Game.OnUpdate += OnUpdate;
             Gapcloser.OnGapcloser += OnGapcloser;
             Drawing.OnEndScene += OnEndScene;
-
+            Obj_AI_Base.OnBasicAttack += OnBasicAttack;
             Chat.Print(
                 "<font color='#FFD700'>Radiant</font> <font color='#DEB887'>Leona</font> <font color='#FFF8DC'>Loaded!</font>");
+        }
+
+        public static void OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe || !(args.Target is AIHeroClient) || !Q.IsReady() || !Player.CanAttack || !GetOption(OMenu, "C"))
+            {
+                return;
+            }
+            Q.Cast();
+            Orbwalker.ResetAutoAttack();
+            EloBuddy.Player.IssueOrder(GameObjectOrder.AttackTo, args.Target);
         }
 
         public static void OnGapcloser(Obj_AI_Base sender, Gapcloser.GapcloserEventArgs args)
