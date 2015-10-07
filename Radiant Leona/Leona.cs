@@ -26,6 +26,7 @@
         {
             Menu = MainMenu.AddMenu("Radiant Leona", "Menu");
             Menu.AddGroupLabel("Developed by Darakath");
+            Menu.AddLabel("Version 1.0.1");
 
             CMenu = Menu.AddSubMenu("Combo", "cMenu");
             CMenu.Add("Q", new CheckBox("Use Q"));
