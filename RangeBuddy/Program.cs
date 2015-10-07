@@ -112,12 +112,12 @@
                     {
                         continue;
                     }
-                    ColorBGRA color = turret.IsAlly ? Color.Green : Color.Yellow;
-                    if (distToTurret <= TrtRange && turret.IsEnemy)
+                    ColorBGRA color = turret.IsAlly && drawAlly ? Color.Green : Color.Yellow;
+                    if (distToTurret <= TrtRange && turret.IsEnemy && drawEnemy)
                     {
                         color = Color.Orange;
                     }
-                    if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe)
+                    if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe && drawEnemy)
                     {
                         color = Color.Red;
                     }

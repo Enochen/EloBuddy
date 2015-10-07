@@ -79,8 +79,7 @@
             Gapcloser.OnGapcloser += OnGapcloser;
             Drawing.OnEndScene += OnEndScene;
             Obj_AI_Base.OnBasicAttack += OnBasicAttack;
-            Chat.Print(
-                "<font color='#FFD700'>Radiant</font> <font color='#DEB887'>Leona</font> <font color='#FFF8DC'>Loaded!</font>");
+            //Chat.Print("<font color='#FFD700'>Radiant</font> <font color='#DEB887'>Leona</font> <font color='#FFF8DC'>Loaded!</font>");
         }
 
         public static void OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

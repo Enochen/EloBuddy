@@ -281,7 +281,6 @@
             if (Q.IsReady() && !Riven.Player.IsRecalling && !Riven.Player.Spellbook.IsChanneling && !Riven.Player.IsDead
                 && Riven.QStacks != 0 && Environment.TickCount - Riven.LastQ >= 3650 && GetOption(Riven.MMenu, "q"))
             {
-                Chat.Print(1);
                 Riven.Player.Spellbook.CastSpell(SpellSlot.Q, Game.CursorPos);
             }
             else if (Riven.Player.IsDead || Environment.TickCount - Riven.LastQ >= 3651)

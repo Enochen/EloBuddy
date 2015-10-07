@@ -97,7 +97,7 @@
             //Interrupter.OnInterruptableSpell += OnInterruptableSpell;
             Drawing.OnEndScene += OnEndScene;
 
-            Chat.Print("PureTrundle v" + version + " Loaded");
+            //Chat.Print("PureTrundle v" + version + " Loaded");
         }
 
         public static void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
