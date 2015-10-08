@@ -27,14 +27,14 @@
 
         private static bool turretIsAttackingMe;
 
-        private static void CacheTurrets()
-        {
-            foreach (var obj in ObjectManager.Get<Obj_AI_Turret>().Where(obj => !TurretCache.ContainsKey(obj.NetworkId))
-                )
-            {
-                TurretCache.Add(obj.NetworkId, obj);
-            }
-        }
+        //private static void CacheTurrets()
+        //{
+        //    foreach (var obj in ObjectManager.Get<Obj_AI_Turret>().Where(obj => !TurretCache.ContainsKey(obj.NetworkId))
+        //        )
+        //    {
+        //        TurretCache.Add(obj.NetworkId, obj);
+        //    }
+        //}
 
         private static void DrawAttack()
         {
@@ -98,15 +98,14 @@
             {
                 return;
             }
-            foreach (var entry in TurretCache)
+            foreach (var entry in EntityManager.Turrets.AllTurrets)
             {
-                var turret = entry.Value;
+                var turret = entry;
                 if (turret == null || !turret.IsValid || turret.IsDead)
                 {
-                    TurretCache.Remove(entry.Key);
+                    return;
                 }
-                else
-                {
+                
                     var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
                     if (!(distToTurret < TrtRange + 1500) || !turret.IsValidTarget())
                     {
@@ -133,7 +132,7 @@
                     {
                         new Circle(color, TrtRange, thickness).Draw(turret.Position);
                     }
-                }
+                
             }
         }
 
@@ -168,7 +167,7 @@
             tMenu.Add("t.a", new CheckBox("Draw Ally", false));
             tMenu.Add("t.e", new CheckBox("Draw Enemy", false));
 
-            CacheTurrets();
+            //CacheTurrets();
             Game.OnTick += OnTick;
             Obj_AI_Base.OnBasicAttack += OnTurretAttack;
             Drawing.OnDraw += OnDrawingDraw;
@@ -190,6 +189,7 @@
             {
                 turretIsAttackingMe = true;
                 currentTurret = sender;
+                
             }
         }
     }
