@@ -112,16 +112,27 @@
                     {
                         continue;
                     }
-                    ColorBGRA color = turret.IsAlly && drawAlly ? Color.Green : Color.Yellow;
-                    if (distToTurret <= TrtRange && turret.IsEnemy && drawEnemy)
+                    ColorBGRA color = Color.HotPink;
+                    if (drawAlly && turret.IsAlly)
                     {
-                        color = Color.Orange;
+                        color = Color.Green;
                     }
-                    if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe && drawEnemy)
+                    if (drawEnemy && turret.IsEnemy)
                     {
-                        color = Color.Red;
+                        color = Color.Yellow;
+                        if (distToTurret <= TrtRange)
+                        {
+                            color = Color.Orange;
+                        }
+                        if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe)
+                        {
+                            color = Color.Red;
+                        }
                     }
-                    new Circle(color, TrtRange, thickness).Draw(turret.Position);
+                    if (color != (ColorBGRA)Color.HotPink)
+                    {
+                        new Circle(color, TrtRange, thickness).Draw(turret.Position);
+                    }
                 }
             }
         }
