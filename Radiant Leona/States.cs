@@ -39,7 +39,7 @@
                 && (R.GetPrediction(target).HitChance > HitChance.High
                     || R2.GetPrediction(target).HitChance > HitChance.Medium))
             {
-                R.Cast(target.ServerPosition);
+                R.Cast(target);
             }
 
             if (W.IsReady() && useW && Player.CountEnemiesInRange(W.Range) > 0)
@@ -49,11 +49,9 @@
             
             if (E.IsReady() && useE)
             {
-                E.Cast(target.ServerPosition);
-                if (E.MinimumHitChance > HitChance.High)
-                {
-                    W.Cast();
-                }
+                E.Cast(target);
+                W.Cast();
+                
             }
         }
     }
