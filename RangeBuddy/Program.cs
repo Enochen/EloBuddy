@@ -1,7 +1,6 @@
 ﻿namespace RangeBuddy
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using EloBuddy;
@@ -21,20 +20,11 @@
 
         private static Menu rMenu, eMenu, aMenu, tMenu, sMenu;
 
-        private static readonly Dictionary<int, Obj_AI_Turret> TurretCache = new Dictionary<int, Obj_AI_Turret>();
-
         private static Obj_AI_Base currentTurret = ObjectManager.Player;
 
         private static bool turretIsAttackingMe;
 
-        //private static void CacheTurrets()
-        //{
-        //    foreach (var obj in ObjectManager.Get<Obj_AI_Turret>().Where(obj => !TurretCache.ContainsKey(obj.NetworkId))
-        //        )
-        //    {
-        //        TurretCache.Add(obj.NetworkId, obj);
-        //    }
-        //}
+        private static readonly SpellSlot[] Spells = { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
 
         private static void DrawAttack()
         {
@@ -105,34 +95,33 @@
                 {
                     return;
                 }
-                
-                    var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
-                    if (!(distToTurret < TrtRange + 1500) || !turret.IsValidTarget())
+
+                var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
+                if (!(distToTurret < TrtRange + 1500) || !turret.IsValidTarget())
+                {
+                    continue;
+                }
+                ColorBGRA color = Color.HotPink;
+                if (drawAlly && turret.IsAlly)
+                {
+                    color = Color.Green;
+                }
+                if (drawEnemy && turret.IsEnemy)
+                {
+                    color = Color.Yellow;
+                    if (distToTurret <= TrtRange)
                     {
-                        continue;
+                        color = Color.Orange;
                     }
-                    ColorBGRA color = Color.HotPink;
-                    if (drawAlly && turret.IsAlly)
+                    if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe)
                     {
-                        color = Color.Green;
+                        color = Color.Red;
                     }
-                    if (drawEnemy && turret.IsEnemy)
-                    {
-                        color = Color.Yellow;
-                        if (distToTurret <= TrtRange)
-                        {
-                            color = Color.Orange;
-                        }
-                        if (currentTurret.NetworkId == turret.NetworkId && turretIsAttackingMe)
-                        {
-                            color = Color.Red;
-                        }
-                    }
-                    if (color != (ColorBGRA)Color.HotPink)
-                    {
-                        new Circle(color, TrtRange, thickness).Draw(turret.Position);
-                    }
-                
+                }
+                if (color != (ColorBGRA)Color.HotPink)
+                {
+                    new Circle(color, TrtRange, thickness).Draw(turret.Position);
+                }
             }
         }
 
@@ -146,6 +135,24 @@
             DrawExperience();
             DrawTurret();
             DrawAttack();
+            DrawSkills();
+        }
+
+        private static void DrawSkills()
+        {
+            var thickness = rMenu["cT"].Cast<Slider>().CurrentValue;
+            foreach (var spell in Spells.Where(spell => ObjectManager.Player.Spellbook.GetSpell(spell).IsReady
+                                                        && sMenu[
+                                                            "s."
+                                                            + spell.ToString()
+                                                                  .Remove(spell.ToString().IndexOf("SpellSlot.", StringComparison.Ordinal), 10)
+                                                                  .ToLower()].Cast<CheckBox>().CurrentValue))
+            {
+                new Circle(
+                    Color.Aquamarine,
+                    ObjectManager.Player.Spellbook.GetSpell(spell).SData.CastRange,
+                    thickness).Draw(ObjectManager.Player.Position);
+            }
         }
 
         private static void OnLoad(EventArgs args)
@@ -166,6 +173,12 @@
             tMenu = rMenu.AddSubMenu("Turret");
             tMenu.Add("t.a", new CheckBox("Draw Ally", false));
             tMenu.Add("t.e", new CheckBox("Draw Enemy", false));
+
+            sMenu = rMenu.AddSubMenu("Skills");
+            sMenu.Add("s.q", new CheckBox("Draw Q Range", false));
+            sMenu.Add("s.w", new CheckBox("Draw W Range", false));
+            sMenu.Add("s.e", new CheckBox("Draw E Range", false));
+            sMenu.Add("s.r", new CheckBox("Draw R Range", false));
 
             //CacheTurrets();
             Game.OnTick += OnTick;
@@ -189,7 +202,6 @@
             {
                 turretIsAttackingMe = true;
                 currentTurret = sender;
-                
             }
         }
     }

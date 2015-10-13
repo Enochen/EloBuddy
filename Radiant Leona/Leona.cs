@@ -14,7 +14,7 @@
 
     internal class Leona
     {
-        public static Menu Menu, CMenu, HMenu, WMenu, JMenu, MMenu, DMenu, OMenu;
+        public static Menu Menu, CMenu, HMenu, MMenu, DMenu, OMenu;
 
         public static AIHeroClient Player = ObjectManager.Player;
 

@@ -20,15 +20,13 @@
     {
         public static Spell.Targeted R;
 
-        public static Menu Menu, CMenu, HMenu, WMenu, JMenu, MMenu, DMenu, OMenu;
+        public static Menu Menu, CMenu, HMenu, WMenu, MMenu, DMenu, OMenu;
 
         public static AIHeroClient Player = ObjectManager.Player;
 
         public static Spell.Skillshot W, E;
 
         public static Spell.Active Chomp;
-
-        private static readonly string version = "0.3";
 
         public static void CreateMenu()
         {

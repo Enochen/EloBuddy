@@ -69,7 +69,7 @@
                     gameObjects.Where(
                         o =>
                         o.Position.Distance(Game.CursorPos) < cMenu["mouseRange"].Cast<Slider>().CurrentValue
-                        && !(o is Obj_Turret) && o.Name != "missile" && !(o is Obj_LampBulb) && !(o is Obj_SpellMissile)
+                        && !(o is Obj_Turret) && o.Name != "missile" && !(o is Obj_LampBulb) && !(o is MissileClient)
                         && !(o is GrassObject) && !(o is DrawFX) && !(o is LevelPropSpawnerPoint)
                         && !(o is Obj_GeneralParticleEmitter) && !o.Name.Contains("MoveTo")).ToList();
                 lastTick = Environment.TickCount;
@@ -118,9 +118,9 @@
                         Drawing.DrawText(x, (y + 130 + i), GetMenuColor(), buffs[i / 10].Count + "x " + buffs[i / 10].Name);
                     }
                 }
-                if (obj is Obj_SpellMissile)
+                if (obj is MissileClient)
                 {
-                    var missile = obj as Obj_SpellMissile;
+                    var missile = obj as MissileClient;
                     Drawing.DrawText(x, y + 40, GetMenuColor(), "Missile Speed: " + missile.SData.MissileSpeed);
                     Drawing.DrawText(x, y + 50, GetMenuColor(), "Cast Range: " + missile.SData.CastRange);
                 }
