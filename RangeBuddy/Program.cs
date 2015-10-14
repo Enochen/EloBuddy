@@ -97,7 +97,7 @@
                 }
 
                 var distToTurret = ObjectManager.Player.ServerPosition.Distance(turret.Position);
-                if (!(distToTurret < TrtRange + 1500) || !turret.IsValidTarget())
+                if (!(distToTurret < TrtRange + 1500))
                 {
                     continue;
                 }
@@ -141,17 +141,16 @@
         private static void DrawSkills()
         {
             var thickness = rMenu["cT"].Cast<Slider>().CurrentValue;
-            foreach (var spell in Spells.Where(spell => ObjectManager.Player.Spellbook.GetSpell(spell).IsReady
-                                                        && sMenu[
-                                                            "s."
-                                                            + spell.ToString()
-                                                                  .Remove(spell.ToString().IndexOf("SpellSlot.", StringComparison.Ordinal), 10)
-                                                                  .ToLower()].Cast<CheckBox>().CurrentValue))
+            foreach (
+                var spell in
+                    Spells.Where(
+                        spell =>
+                        ObjectManager.Player.Spellbook.GetSpell(spell).IsReady
+                        && sMenu["s." + spell.ToString()[spell.ToString().Length - 1].ToString().ToLower()]
+                               .Cast<CheckBox>().CurrentValue))
             {
-                new Circle(
-                    Color.Aquamarine,
-                    ObjectManager.Player.Spellbook.GetSpell(spell).SData.CastRange,
-                    thickness).Draw(ObjectManager.Player.Position);
+                new Circle(Color.Aquamarine, ObjectManager.Player.Spellbook.GetSpell(spell).SData.CastRange, thickness)
+                    .Draw(ObjectManager.Player.Position);
             }
         }
 
@@ -198,11 +197,12 @@
 
         private static void OnTurretAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender is Obj_AI_Turret && args.Target.IsMe)
+            if (!(sender.IsStructure()) || !args.Target.IsMe)
             {
-                turretIsAttackingMe = true;
-                currentTurret = sender;
+                return;
             }
+            turretIsAttackingMe = true;
+            currentTurret = sender;
         }
     }
 }
