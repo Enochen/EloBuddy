@@ -98,7 +98,7 @@
             }
         }
 
-        public static void DoCombo(bool useW, bool useR, bool harass)
+        public static void DoCombo(bool useW, bool useE, bool useR, bool harass)
         {
             var target = TargetSelector.GetTarget(Trundle.E.Range - Trundle.E.Radius / 2, DamageType.Physical);
 
@@ -124,6 +124,11 @@
             }
 
             if (Trundle.W.IsReady() && useW)
+            {
+                Trundle.W.Cast(target);
+            }
+
+            if (Trundle.W.IsReady() && useE)
             {
                 Trundle.W.Cast(target);
             }

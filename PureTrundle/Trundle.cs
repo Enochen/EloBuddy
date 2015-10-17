@@ -234,11 +234,11 @@
             //States.PillarBlock();
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
-                States.DoCombo(GetOption(CMenu, "W"), GetOption(CMenu, "R"), false);
+                States.DoCombo(GetOption(CMenu, "W"), GetOption(CMenu, "E"), GetOption(CMenu, "R"), false);
             }
             else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
             {
-                States.DoCombo(GetOption(HMenu, "W"), false, true);
+                States.DoCombo(GetOption(HMenu, "W"), GetOption(HMenu, "E"), false, true);
             }
             else if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)
                      || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
