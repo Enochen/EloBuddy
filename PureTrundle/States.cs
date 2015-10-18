@@ -35,7 +35,7 @@
 
             if (qaa)
             {
-                return target.Health - result > (Trundle.Player.GetAutoAttackDamage(target)) * 0.3;
+                return target.Health - result > (Trundle.Player.TotalAttackDamage) * 0.3;
             }
 
             if (Item.HasItem(Botrk) && Item.CanUseItem(Botrk))

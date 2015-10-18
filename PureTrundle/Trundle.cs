@@ -52,9 +52,13 @@
             HMenu.Add("TH", new CheckBox("Use Tiamat/Hydra"));
 
             WMenu = Menu.AddSubMenu("Wave/Jungle Clear", "wMenu");
-            WMenu.Add("WW", new CheckBox("Use W for WaveClear"));
+            WMenu.Add("QW", new CheckBox("Use Q for WaveClear", false));
             WMenu.AddSeparator();
-            WMenu.Add("WJ", new CheckBox("Use W for JungleClear"));
+            WMenu.Add("QJ", new CheckBox("Use Q for JungleClear", false));
+            WMenu.AddSeparator();
+            WMenu.Add("WW", new CheckBox("Use W for WaveClear", false));
+            WMenu.AddSeparator();
+            WMenu.Add("WJ", new CheckBox("Use W for JungleClear", false));
             WMenu.AddSeparator();
             WMenu.Add("TH", new CheckBox("Use Tiamat/Hydra"));
 
@@ -109,8 +113,8 @@
                 && States.CalcDmg((Obj_AI_Base)args.Target, true)
                 && ((Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)
                      && Player.ManaPercent > GetOption(MMenu, "Q"))
-                    || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && States.UseQwc)
-                    || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) && States.UseQjf)
+                    || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) && States.UseQwc && GetOption(WMenu, "QW"))
+                    || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) && States.UseQjf && GetOption(WMenu, "QJ"))
                     || (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass)
                         && Player.ManaPercent > GetOption(MMenu, "H"))))
             {
