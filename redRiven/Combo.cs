@@ -278,7 +278,7 @@
                 Riven.Player.Spellbook.CastSpell(SpellSlot.Q, Riven.mainTarget.Position);
             }
 
-            if (Q.IsReady() && !Riven.Player.IsRecalling && !Riven.Player.Spellbook.IsChanneling && !Riven.Player.IsDead
+            if (Q.IsReady() && !Riven.Player.IsRecalling() && !Riven.Player.Spellbook.IsChanneling && !Riven.Player.IsDead
                 && Riven.QStacks != 0 && Environment.TickCount - Riven.LastQ >= 3650 && GetOption(Riven.MMenu, "q"))
             {
                 Riven.Player.Spellbook.CastSpell(SpellSlot.Q, Game.CursorPos);
