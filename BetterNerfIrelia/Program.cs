@@ -5,6 +5,7 @@ namespace BetterNerfIrelia
     using System;
 
     using EloBuddy;
+    using EloBuddy.SDK;
     using EloBuddy.SDK.Events;
     using EloBuddy.SDK.Rendering;
 
@@ -24,10 +25,11 @@ namespace BetterNerfIrelia
                 return;
             }
 
+            Console.WriteLine(Player.Instance.GetSpellSlotFromName("summonerdot"));
             Config.Initialize();
             SpellManager.Initialize();
             ModeManager.Initialize();
-            //DamageIndicator.Initialize(SpellDamage.GetTotalDamage);
+            DamageIndicator.Initialize(SpellDamage.GetTotalDamage);
 
             Drawing.OnDraw += OnDraw;
         }

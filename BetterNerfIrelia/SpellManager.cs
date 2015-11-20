@@ -21,8 +21,12 @@ namespace BetterNerfIrelia
             W = new Spell.Active(SpellSlot.W);
             E = new Spell.Targeted(SpellSlot.E, 425);
             R = new Spell.Skillshot(SpellSlot.R, 1000, SkillShotType.Linear, 0, 1600, 65);
-            Ignite = new Spell.Targeted(Player.Instance.GetSpellSlotFromName("summonerdot"), 600);
-            Console.WriteLine(Ignite.Slot);
+            Console.WriteLine(Player.Instance.GetSpellSlotFromName("summonerdot"));
+            var fireSlot = Player.Instance.GetSpellSlotFromName("summonerdot");
+            if (fireSlot != SpellSlot.Unknown)
+            {
+                Ignite = new Spell.Targeted(fireSlot, 600);
+            }
         }
 
         public static void Initialize()

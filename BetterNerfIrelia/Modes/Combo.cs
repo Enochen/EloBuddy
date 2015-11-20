@@ -65,7 +65,7 @@ namespace BetterNerfIrelia.Modes
                     R.Cast(target);
                 }
             }
-            if (Settings.UseF && Ignite.IsReady() && Ignite.GetRealDamage(target) > target.Health)
+            if ((Ignite.Slot != SpellSlot.Unknown) && Settings.UseF && Ignite.IsReady() && Ignite.GetRealDamage(target) > target.Health)
             {
                 Ignite.Cast(target);
             }
