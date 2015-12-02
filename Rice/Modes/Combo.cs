@@ -29,7 +29,7 @@ namespace Rice.Modes
             var shouldE = Settings.UseE && E.IsReady() && ModeManager.LastSpell != SpellSlot.W;
             var shouldR = Settings.UseR && R.IsReady();
 
-            var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE, shouldR }.Count(x => x);
+            var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE}.Count(x => x);
 
             switch (ModeManager.PassiveCount)
             {
@@ -81,7 +81,7 @@ namespace Rice.Modes
                 return;
             }
             if (shouldR
-                && (stacks > 3 || ModeManager.PassiveCharged || SpellDamage.GetTotalDamage(target) > target.Health))
+                && (stacks > 4 || ModeManager.PassiveCharged || SpellDamage.GetTotalDamage(target) > target.Health))
             {
                 R.Cast();
                 return;
