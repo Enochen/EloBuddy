@@ -67,6 +67,15 @@ namespace Rice
                         "AutoStackQ",
                         new KeyBind("Auto Stack Passive", false, KeyBind.BindTypes.PressToggle, 'Z'));
 
+                    _AutoStackQ.OnValueChange += delegate(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
+                        {
+                            Program.StackingStatus.TextValue = args.NewValue
+                                                                   ? "Passive Stacking On"
+                                                                   : "Passive Stacking Off";
+
+                            Program.StackingStatus.Color = args.NewValue ? Color.LimeGreen : Color.Red;
+                        };
+
                     _AutoStackMana = MiscMenu.Add("AutoStackMana", new Slider("Min Mana %", 30));
 
                     _MaxStacks = MiscMenu.Add("MaxStacks", new Slider("Keep Stacks At", 3, 1, 4));
@@ -591,6 +600,10 @@ namespace Rice
 
                 private static readonly CheckBox _ChangeNames;
 
+                private static readonly CheckBox _AutoWInterruptible;
+
+                private static readonly CheckBox _AutoWGapCloser;
+
                 public static List<string> EnemyNames, AllyNames;
 
                 public static int QCollision
@@ -609,50 +622,76 @@ namespace Rice
                     }
                 }
 
+                public static bool AutoWInterruptible
+                {
+                    get
+                    {
+                        return _AutoWInterruptible.CurrentValue;
+                    }
+                }
+
+                public static bool AutoWGapCloser
+                {
+                    get
+                    {
+                        return _AutoWGapCloser.CurrentValue;
+                    }
+                }
+
                 static Misc()
                 {
                     MiscMenu.AddGroupLabel("Miscellaneous");
                     _QCollision = MiscMenu.Add("QCollision", new Slider("QCollision: Always Q At Enemy", 0, 0, 1));
                     _ChangeNames = MiscMenu.Add("ChangeNames", new CheckBox("Change Hero Names (Experimental)", false));
+                    _AutoWGapCloser = MiscMenu.Add("AutoWGapCloser", new CheckBox("Auto Root On Gapcloser"));
+                    _AutoWInterruptible = MiscMenu.Add("AutoWInterruptible", new CheckBox("Auto Root On Interruptible"));
 
                     _QCollision.OnValueChange += delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs args)
                         {
-                            if (args.NewValue == 1)
+                            switch (args.NewValue)
                             {
-                                _QCollision.DisplayName = "QCollision: Only Q If No Collision";
-                                SpellManager.Q.AllowedCollisionCount = 0;
-                                return;
+                                case 0:
+                                    _QCollision.DisplayName = "QCollision: Always Q At Enemy";
+                                    break;
+                                case 1:
+                                    _QCollision.DisplayName = "QCollision: Only Q If No Collision";
+                                    break;
                             }
-                            _QCollision.DisplayName = "QCollision: Always Q At Enemy";
-                            SpellManager.Q.AllowedCollisionCount = int.MaxValue;
                         };
-                    _ChangeNames.OnValueChange +=
-                        delegate(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
+                    _ChangeNames.OnValueChange += delegate(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
+                        {
+                            if (args.NewValue == false)
                             {
-                                if (args.NewValue == false)
+                                foreach (var enemy in EntityManager.Heroes.Enemies)
                                 {
-                                    foreach (var enemy in EntityManager.Heroes.Enemies)
-                                    {
-                                        enemy.Name = EnemyNames[EntityManager.Heroes.Enemies.OrderBy(x => x.NetworkId).ToList().IndexOf(enemy)];
-                                    }
-                                    foreach (var ally in EntityManager.Heroes.Allies)
-                                    {
-                                        ally.Name = AllyNames[EntityManager.Heroes.Enemies.OrderBy(x => x.NetworkId).ToList().IndexOf(ally)];
-                                    }
+                                    enemy.Name =
+                                        EnemyNames[
+                                            EntityManager.Heroes.Enemies.OrderBy(x => x.NetworkId)
+                                                .ToList()
+                                                .IndexOf(enemy)];
                                 }
-                                else
+                                foreach (var ally in EntityManager.Heroes.Allies)
                                 {
-                                    foreach (var enemy in EntityManager.Heroes.Enemies)
-                                    {
-                                        enemy.Name = "Combo Me Pls";
-                                    }
-                                    foreach (var ally in EntityManager.Heroes.Allies)
-                                    {
-                                        ally.Name = "Don't Let Me KS";
-                                    }
-                                    Player.Instance.Name = "Best Rice EB";
+                                    ally.Name =
+                                        AllyNames[
+                                            EntityManager.Heroes.Enemies.OrderBy(x => x.NetworkId)
+                                                .ToList()
+                                                .IndexOf(ally)];
                                 }
-                            };
+                            }
+                            else
+                            {
+                                foreach (var enemy in EntityManager.Heroes.Enemies)
+                                {
+                                    enemy.Name = "Combo Me Pls";
+                                }
+                                foreach (var ally in EntityManager.Heroes.Allies)
+                                {
+                                    ally.Name = "Don't Let Me KS";
+                                }
+                                Player.Instance.Name = "Best Rice EB";
+                            }
+                        };
                 }
 
                 public static void Initialize()
@@ -751,8 +790,8 @@ namespace Rice
                 Misc.Initialize();
                 Menu.AddSeparator();
                 AutoStack.Initialize();
-                Menu.AddSeparator();
-                TearStack.Initialize();
+                //Menu.AddSeparator();
+                //TearStack.Initialize();
 
                 DrawMenu = Menu.AddSubMenu("Draw");
                 Draw.Initialize();

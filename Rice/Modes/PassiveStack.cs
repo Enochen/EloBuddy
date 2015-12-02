@@ -19,14 +19,14 @@ namespace Rice.Modes
 
         public override void Execute()
         {
-            //No enemies, not recalling, required mana, not in base, too many stacks, Q not ready, etc
+            //No enemies, not recalling, required mana, too many stacks, Q not ready, etc
             if (EntityManager.MinionsAndMonsters.CombinedAttackable.Any(x => x.IsValidTarget(Q.Range + 50))) { return; }
             if (EntityManager.Heroes.Enemies.Any(x => x.IsValidTarget(Q.Range + 100))) { return; }
-            if (Player.Instance.IsRecalling() || Shop.CanShop) { return; }
+            if (Player.Instance.IsRecalling() || Game.CursorPos.IsZero) { return; }
             if (Player.Instance.ManaPercent < Settings.AutoStackMana) { return; }
-            if (ModeManager.PassiveCount >= Settings.MaxStacks || !Q.IsReady() || Game.CursorPos.IsZero) { return; }
+            if (ModeManager.PassiveCount >= Settings.MaxStacks || !Q.IsReady()) { return; }
             if ((Environment.TickCount - LastTick < Settings.StackTimer * 1000 - (100 + (Game.Ping / 2)))) { return; }
-            
+
             LastTick = Environment.TickCount;
             Q.Cast(Game.CursorPos);
         }

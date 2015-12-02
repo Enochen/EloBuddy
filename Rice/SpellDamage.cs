@@ -11,9 +11,9 @@ namespace Rice
             var damage = Player.Instance.GetAutoAttackDamage(target);
 
             // Q
-            if (SpellManager.Q.IsReady())
+            if (SpellManager.Q1.IsReady())
             {
-                damage += SpellManager.Q.GetRealDamage(target);
+                damage += SpellManager.Q1.GetRealDamage(target);
             }
 
             // W

@@ -34,7 +34,7 @@ namespace Rice.Modes
                 if (shouldQ && Q.GetRealDamage(minion) > health + 50 && !Q.GetPrediction(minion).Collision && !minion.IsDead)
                 {
                     Orbwalker.ForcedTarget = null;
-                    Q.PredCast(minion);
+                    SpellManager.Q2.PredCast(minion);
                 }
                 if (shouldW && W.GetRealDamage(minion) > health)
                 {

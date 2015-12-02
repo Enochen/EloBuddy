@@ -10,6 +10,7 @@ namespace Rice
     using System.Linq;
 
     using EloBuddy.SDK;
+    using EloBuddy.SDK.Events;
 
     public static class ModeManager
     {
@@ -34,7 +35,6 @@ namespace Rice
             get
             {
                 return Player.Instance.HasBuff("ryzepassivecharged");
-                
             }
         }
 
@@ -45,18 +45,41 @@ namespace Rice
             Modes.AddRange(new ModeBase[]
             {
                 new PermaActive(),
+                new Combo(),
                 new LaneClear(),
                 new JungleClear(),
                 new Harass(),
                 new LastHit(),
                 new PassiveStack(),
-                new Combo(),
                 //new TearStack()
-              //new Flee()
+                //new Flee()
             });
 
             Game.OnTick += OnTick;
             Spellbook.OnCastSpell += OnCastSpell;
+
+            if(Config.Modes.Misc.AutoWGapCloser)
+            Gapcloser.OnGapcloser += OnGapCloser;
+
+            if(Config.Modes.Misc.AutoWInterruptible)
+            Interrupter.OnInterruptableSpell += OnInterruptibleSpell;
+
+        }
+
+        private static void OnInterruptibleSpell(Obj_AI_Base sender, Interrupter.InterruptableSpellEventArgs args)
+        {
+            if (args.DangerLevel > DangerLevel.Medium && sender.IsEnemy && sender.IsValidTarget(SpellManager.W.Range) && SpellManager.W.IsReady())
+            {
+                SpellManager.W.Cast(sender);
+            }
+        }
+
+        private static void OnGapCloser(AIHeroClient sender, Gapcloser.GapcloserEventArgs args)
+        {
+            if (sender.IsEnemy && sender.IsValidTarget(SpellManager.W.Range) && SpellManager.W.IsReady())
+            {
+                SpellManager.W.Cast(sender);
+            }
         }
 
         private static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)

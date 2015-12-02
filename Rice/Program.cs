@@ -3,6 +3,7 @@
 namespace Rice
 {
     using System;
+    using System.Drawing;
     using System.Linq;
 
     using EloBuddy;
@@ -10,10 +11,16 @@ namespace Rice
     using EloBuddy.SDK.Events;
     using EloBuddy.SDK.Rendering;
 
+    using SharpDX;
+
+    using Color = System.Drawing.Color;
+
     public static class Program
     {
         // ReSharper disable once MemberCanBePrivate.Global
         public const string ChampName = "Ryze";
+
+        public static Text StackingStatus = new Text("Rice", new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold));
 
         public static void Main(string[] args)
         {
@@ -47,20 +54,28 @@ namespace Rice
                 }
                 Player.Instance.Name = "Best Rice EB";
             }
+            StackingStatus.TextValue = Config.Modes.AutoStack.AutoStackQ
+                                           ? "Passive Stacking On"
+                                           : "Passive Stacking Off";
+            StackingStatus.Color = Config.Modes.AutoStack.AutoStackQ ? Color.LimeGreen : Color.Red;
             Config.Initialize();
             SpellManager.Initialize();
             ModeManager.Initialize();
             DamageIndicator.Initialize(SpellDamage.GetTotalDamage);
 
             Drawing.OnDraw += OnDraw;
-            
         }
 
         private static void OnDraw(EventArgs args)
         {
-            if (Settings.DrawReady ? SpellManager.Q.IsReady() : Settings.DrawQ)
+
+            StackingStatus.Position = Player.Instance.Position.WorldToScreen() -
+                                      new Vector2((float)(StackingStatus.Bounding.Width / 2.0), -38);
+            StackingStatus.Draw();
+
+            if (Settings.DrawReady ? SpellManager.Q1.IsReady() : Settings.DrawQ)
             {
-                new Circle { Color = Settings.colorQ, BorderWidth = Settings._widthQ, Radius = SpellManager.Q.Range }
+                new Circle { Color = Settings.colorQ, BorderWidth = Settings._widthQ, Radius = SpellManager.Q1.Range }
                     .Draw(Player.Instance.Position);
             }
 

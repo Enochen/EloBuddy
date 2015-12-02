@@ -38,18 +38,17 @@
     <Reference Include="EloBuddy.SDK">
       <HintPath>..\..\System\EloBuddy.SDK.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Core\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX">
       <HintPath>..\..\System\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>..\..\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -59,6 +58,7 @@
     <Compile Include="DamageIndicator.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ModeManager.cs" />
+    <Compile Include="Modes\TearStack.cs" />
     <Compile Include="Modes\PassiveStack.cs" />
     <Compile Include="Modes\PermaActive.cs" />
     <Compile Include="Modes\Flee.cs" />
