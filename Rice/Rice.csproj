@@ -57,6 +57,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="DamageIndicator.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Humanizer.cs" />
     <Compile Include="ModeManager.cs" />
     <Compile Include="Modes\TearStack.cs" />
     <Compile Include="Modes\PassiveStack.cs" />

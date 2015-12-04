@@ -87,6 +87,50 @@ namespace Rice
                 {
                 }
             }
+            public static class Humanizer
+            {
+                private static readonly Slider _MinDelay;
+
+                private static readonly Slider _MaxDelay;
+
+                private static readonly CheckBox _Humanize;
+
+                public static int MinDelay
+                {
+                    get
+                    {
+                        return _MinDelay.CurrentValue;
+                    }
+                }
+
+                public static int MaxDelay
+                {
+                    get
+                    {
+                        return _MaxDelay.CurrentValue;
+                    }
+                }
+
+                public static bool Humanize
+                {
+                    get
+                    {
+                        return _Humanize.CurrentValue;
+                    }
+                }
+
+                static Humanizer()
+                {
+                    MiscMenu.AddGroupLabel("Humanizer");
+                    _MinDelay = MiscMenu.Add("minDelay", new Slider("Minimum Delay", 10, 0, 200));
+                    _MaxDelay = MiscMenu.Add("maxDelay", new Slider("Maximum Delay", 75, 0, 250));
+                    _Humanize = MiscMenu.Add("humanize", new CheckBox("Humanize", false));
+                }
+
+                public static void Initialize()
+                {
+                }
+            }
 
             public static class Combo
             {
@@ -790,6 +834,8 @@ namespace Rice
                 Misc.Initialize();
                 Menu.AddSeparator();
                 AutoStack.Initialize();
+                Menu.AddSeparator();
+                Humanizer.Initialize();
                 //Menu.AddSeparator();
                 //TearStack.Initialize();
 
