@@ -45,11 +45,6 @@ namespace Rice.Modes
                             }
                             return;
                         }
-                        if (shouldQ)
-                        {
-                            Q.PredCast(target);
-                            return;
-                        }
                     }
                     break;
 

@@ -3,6 +3,7 @@
     using System;
 
     using EloBuddy;
+    using EloBuddy.SDK;
 
     //By 0x0539
     //From SluttyRyze
@@ -16,21 +17,18 @@
             public float LastTick { get; set; }
         }
 
-        private static Action General;
+        private static Action general;
 
         public static void ChangeDelay(float nDelay)
         {
-            General.Delay = nDelay;
+            general.Delay = nDelay;
         }
 
         public static bool CheckDelay(string actionName)
         {
-
-            if (!(Environment.TickCount - General.LastTick >= General.Delay)) { return false; }
+            if (!(Core.GameTickCount - general.LastTick >= general.Delay)) { return false; }
             
-            General.LastTick = Environment.TickCount;
-
-            Chat.Print(Environment.TickCount + " - " + General.LastTick);
+            general.LastTick = Core.GameTickCount;
             return true;
         }
     }

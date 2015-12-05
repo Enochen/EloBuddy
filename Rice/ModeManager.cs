@@ -105,10 +105,8 @@
             {
                 if (!Humanizer.CheckDelay("general"))
                 {
-                    //Chat.Print("smth");
                     return;
                 }
-                //Chat.Print("smth2");
                 Humanizer.ChangeDelay(
                     new Random().Next(Config.Modes.Humanizer.MinDelay, Config.Modes.Humanizer.MaxDelay));
             }
