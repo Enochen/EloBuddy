@@ -9,26 +9,25 @@
     //From SluttyRyze
     public class Humanizer
     {
-        private struct Action
+        public struct Action
         {
-
             public float Delay { get; set; }
 
             public float LastTick { get; set; }
         }
 
-        private static Action general;
+        public static Action General, Spell;
 
-        public static void ChangeDelay(float nDelay)
+        public static void ChangeDelay(Action action, float nDelay)
         {
-            general.Delay = nDelay;
+            action.Delay = nDelay;
         }
 
-        public static bool CheckDelay(string actionName)
+        public static bool CheckDelay(Action action)
         {
-            if (!(Core.GameTickCount - general.LastTick >= general.Delay)) { return false; }
+            if (!(Core.GameTickCount - action.LastTick >= action.Delay)) { return false; }
             
-            general.LastTick = Core.GameTickCount;
+            action.LastTick = Core.GameTickCount;
             return true;
         }
     }

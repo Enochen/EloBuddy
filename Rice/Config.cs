@@ -214,6 +214,8 @@ namespace Rice
 
                 private static readonly CheckBox _drawReady;
 
+                private static readonly CheckBox _drawStackStatus;
+
                 public static bool DrawHealth
                 {
                     get
@@ -259,6 +261,14 @@ namespace Rice
                     get
                     {
                         return _drawReady.CurrentValue;
+                    }
+                }
+
+                public static bool DrawStackStatus
+                {
+                    get
+                    {
+                        return _drawStackStatus.CurrentValue;
                     }
                 }
 
@@ -339,6 +349,7 @@ namespace Rice
                     DrawMenu.AddGroupLabel("Draw");
                     _drawReady = DrawMenu.Add("drawReady", new CheckBox("Draw Only If The Spells Are Ready.", false));
                     _drawHealth = DrawMenu.Add("drawHealth", new CheckBox("Draw Damage in HealthBar"));
+                    _drawStackStatus = DrawMenu.Add("drawStackStatus", new CheckBox("Draw Stacking Status Text"));
                     DrawMenu.AddColorItem("colorHealth");
                     DrawMenu.AddSeparator();
                     //Q

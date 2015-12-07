@@ -68,9 +68,12 @@ namespace Rice
 
         private static void OnDraw(EventArgs args)
         {
-            StackingStatus.Position = Player.Instance.Position.WorldToScreen()
-                                      - new Vector2((float)(StackingStatus.Bounding.Width / 2.0), -38);
-            StackingStatus.Draw();
+            if (Settings.DrawStackStatus)
+            {
+                StackingStatus.Position = Player.Instance.Position.WorldToScreen()
+                                          - new Vector2((float)(StackingStatus.Bounding.Width / 2.0), -38);
+                StackingStatus.Draw();
+            }
 
             if (Settings.DrawReady ? SpellManager.Q1.IsReady() : Settings.DrawQ)
             {

@@ -52,7 +52,7 @@
                         //new Flee()
                     });
 
-            Game.OnTick += OnTick;
+            Game.OnUpdate += OnUpdate;
             Spellbook.OnCastSpell += OnCastSpell;
 
             if (Config.Modes.Misc.AutoWGapCloser)
@@ -98,16 +98,17 @@
         {
         }
 
-        private static void OnTick(EventArgs args)
+        private static void OnUpdate(EventArgs args)
         {
             Orbwalker.DisableAttacking = false;
             if (Config.Modes.Humanizer.Humanize)
             {
-                if (!Humanizer.CheckDelay("general"))
+                if (!Humanizer.CheckDelay(Humanizer.General))
                 {
                     return;
                 }
                 Humanizer.ChangeDelay(
+                    Humanizer.General,
                     new Random().Next(Config.Modes.Humanizer.MinDelay, Config.Modes.Humanizer.MaxDelay));
             }
             Modes.ForEach(
