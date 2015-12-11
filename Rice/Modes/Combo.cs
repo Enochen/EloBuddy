@@ -29,7 +29,7 @@ namespace Rice.Modes
             var shouldE = Settings.UseE && E.IsReady() && ModeManager.LastSpell != SpellSlot.W;
             var shouldR = Settings.UseR && R.IsReady();
 
-            var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE}.Count(x => x);
+            var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE, shouldR}.Count(x => x);
 
             switch (ModeManager.PassiveCount)
             {
