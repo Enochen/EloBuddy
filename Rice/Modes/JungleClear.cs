@@ -11,7 +11,7 @@ namespace Rice.Modes
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear);
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) && Player.Instance.ManaPercent > Settings.Mana;
         }
 
         public override void Execute()

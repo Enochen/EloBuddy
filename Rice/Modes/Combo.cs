@@ -11,7 +11,7 @@ namespace Rice.Modes
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo);
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && Player.Instance.ManaPercent > Settings.Mana;
         }
 
         public override void Execute()

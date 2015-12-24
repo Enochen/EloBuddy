@@ -8,21 +8,16 @@ namespace Rice.Modes
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass);
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) && Player.Instance.ManaPercent > Settings.Mana;
         }
 
         public override void Execute()
         {
-            // TODO: Add harass logic here
-            // See how I used the Settings.UseQ and Settings.Mana here, this is why I love
-            // my way of using the menu in the Config class!
-            if (/*Settings.UseQ && Player.Instance.ManaPercent > Settings.Mana &&*/ Q.IsReady())
+            if (!Settings.UseQ || !Q.IsReady()) { return; }
+            var target = TargetSelector.GetTarget(this.Q.Range, DamageType.Physical);
+            if (target != null)
             {
-                var target = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
-                if (target != null)
-                {
-                    Q.PredCast(target);
-                }
+                this.Q.PredCast(target);
             }
         }
     }

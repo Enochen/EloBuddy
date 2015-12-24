@@ -87,6 +87,7 @@ namespace Rice
                 {
                 }
             }
+
             public static class Humanizer
             {
                 private static readonly Slider _MinDelay;
@@ -144,6 +145,16 @@ namespace Rice
 
                 private static readonly CheckBox _blockAA;
 
+                private static readonly Slider _minMana;
+
+                public static int Mana
+                {
+                    get
+                    {
+                        return _minMana.CurrentValue;
+                    }
+                }
+
                 public static bool UseQ
                 {
                     get
@@ -193,6 +204,7 @@ namespace Rice
                     _useE = ModesMenu.Add("comboE", new CheckBox("Use E"));
                     _useR = ModesMenu.Add("comboR", new CheckBox("Use R"));
                     _blockAA = ModesMenu.Add("blockAA", new CheckBox("Block AA"));
+                    _minMana = ModesMenu.Add("comboMana", new Slider("Minimum Mana %"));
                 }
 
                 public static void Initialize()
@@ -379,11 +391,15 @@ namespace Rice
             {
                 private static readonly CheckBox _useQ;
 
-                private static readonly CheckBox _useW;
+                private static readonly Slider _minMana;
 
-                private static readonly CheckBox _useE;
-
-                private static readonly CheckBox _useR;
+                public static int Mana
+                {
+                    get
+                    {
+                        return _minMana.CurrentValue;
+                    }
+                }
 
                 public static bool UseQ
                 {
@@ -393,38 +409,12 @@ namespace Rice
                     }
                 }
 
-                public static bool UseW
-                {
-                    get
-                    {
-                        return _useW.CurrentValue;
-                    }
-                }
-
-                public static bool UseE
-                {
-                    get
-                    {
-                        return _useE.CurrentValue;
-                    }
-                }
-
-                public static bool UseR
-                {
-                    get
-                    {
-                        return _useR.CurrentValue;
-                    }
-                }
-
                 static Harass()
                 {
                     // Initialize the menu values
                     ModesMenu.AddGroupLabel("Harass");
                     _useQ = ModesMenu.Add("harassQ", new CheckBox("Use Q"));
-                    _useW = ModesMenu.Add("harassW", new CheckBox("Use W", false));
-                    _useE = ModesMenu.Add("harassE", new CheckBox("Use E", false));
-                    _useR = ModesMenu.Add("harassR", new CheckBox("Use R", false));
+                    _minMana = ModesMenu.Add("harassMana", new Slider("Minimum Mana"));
                 }
 
                 public static void Initialize()
@@ -441,6 +431,16 @@ namespace Rice
                 private static readonly CheckBox _useE;
 
                 private static readonly CheckBox _useR;
+
+                private static readonly Slider _minMana;
+
+                public static int Mana
+                {
+                    get
+                    {
+                        return _minMana.CurrentValue;
+                    }
+                }
 
                 public static bool UseQ
                 {
@@ -478,10 +478,11 @@ namespace Rice
                 {
                     // Initialize the menu values
                     ModesMenu.AddGroupLabel("JungleClear");
-                    _useQ = ModesMenu.Add("laneQ", new CheckBox("Use Q"));
-                    _useW = ModesMenu.Add("laneW", new CheckBox("Use W"));
-                    _useE = ModesMenu.Add("laneE", new CheckBox("Use E"));
-                    _useR = ModesMenu.Add("laneR", new CheckBox("Use R"));
+                    _useQ = ModesMenu.Add("jungleQ", new CheckBox("Use Q"));
+                    _useW = ModesMenu.Add("jungleW", new CheckBox("Use W"));
+                    _useE = ModesMenu.Add("jungleE", new CheckBox("Use E"));
+                    _useR = ModesMenu.Add("jungleR", new CheckBox("Use R"));
+                    _minMana = ModesMenu.Add("jungleMana", new Slider("Minimum Mana"));
                 }
 
                 public static void Initialize()
@@ -545,6 +546,16 @@ namespace Rice
 
                 private static readonly CheckBox _useR;
 
+                private static readonly Slider _minMana;
+
+                public static int Mana
+                {
+                    get
+                    {
+                        return _minMana.CurrentValue;
+                    }
+                }
+
                 public static bool UseQ
                 {
                     get
@@ -585,6 +596,7 @@ namespace Rice
                     _useW = ModesMenu.Add("laneW", new CheckBox("Use W"));
                     _useE = ModesMenu.Add("laneE", new CheckBox("Use E"));
                     _useR = ModesMenu.Add("laneR", new CheckBox("Use R"));
+                    _minMana = ModesMenu.Add("laneMana", new Slider("Minimum Mana"));
                 }
 
                 public static void Initialize()
@@ -596,11 +608,15 @@ namespace Rice
             {
                 private static readonly CheckBox _useQ;
 
-                private static readonly CheckBox _useW;
+                private static readonly Slider _minMana;
 
-                private static readonly CheckBox _useE;
-
-                private static readonly CheckBox _useR;
+                public static int Mana
+                {
+                    get
+                    {
+                        return _minMana.CurrentValue;
+                    }
+                }
 
                 public static bool UseQ
                 {
@@ -610,38 +626,12 @@ namespace Rice
                     }
                 }
 
-                public static bool UseW
-                {
-                    get
-                    {
-                        return _useW.CurrentValue;
-                    }
-                }
-
-                public static bool UseE
-                {
-                    get
-                    {
-                        return _useE.CurrentValue;
-                    }
-                }
-
-                public static bool UseR
-                {
-                    get
-                    {
-                        return _useR.CurrentValue;
-                    }
-                }
-
                 static LastHit()
                 {
                     // Initialize the menu values
                     ModesMenu.AddGroupLabel("LastHit");
                     _useQ = ModesMenu.Add("lastQ", new CheckBox("Use Q"));
-                    _useW = ModesMenu.Add("lastW", new CheckBox("Use W", false));
-                    _useE = ModesMenu.Add("lastE", new CheckBox("Use E", false));
-                    _useR = ModesMenu.Add("lastR", new CheckBox("Use R", false)); // Default false
+                    _minMana = ModesMenu.Add("lastMana", new Slider("Minimum Mana"));
                 }
 
                 public static void Initialize()

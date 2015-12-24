@@ -4,13 +4,14 @@ namespace Rice.Modes
 {
     using System.Linq;
 
+    using EloBuddy;
     using EloBuddy.SDK;
 
     public sealed class LastHit : ModeBase
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit);
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) && Player.Instance.ManaPercent > Settings.Mana;
         }
 
         public override void Execute()
@@ -19,9 +20,6 @@ namespace Rice.Modes
             var minions = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsValidTarget(Q.Range)).OrderBy(x=>x.Health);
 
             var shouldQ = Settings.UseQ && Q.IsReady();
-            var shouldW = Settings.UseW && W.IsReady();
-            var shouldE = Settings.UseE && E.IsReady();
-            var shouldR = Settings.UseR && R.IsReady();
 
             foreach (var minion in minions)
             {
@@ -35,18 +33,6 @@ namespace Rice.Modes
                 {
                     Orbwalker.ForcedTarget = null;
                     SpellManager.Q2.PredCast(minion);
-                }
-                if (shouldW && W.GetRealDamage(minion) > health)
-                {
-                    W.Cast(minion);
-                }
-                if (shouldE && E.GetRealDamage(minion) > health)
-                {
-                    E.Cast(minion);
-                }
-                if (shouldR && Q.GetRealDamage(minion) > health)
-                {
-                    R.Cast();
                 }
             }
         }
