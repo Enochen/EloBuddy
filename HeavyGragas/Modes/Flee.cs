@@ -1,4 +1,4 @@
-﻿namespace Rice.Modes
+﻿namespace HeavyGragas.Modes
 {
     using EloBuddy.SDK;
 
@@ -11,7 +11,6 @@
 
         public override void Execute()
         {
-            // TODO: Add flee logic here
         }
     }
 }

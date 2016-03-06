@@ -1,6 +1,4 @@
-﻿using Settings = Rice.Config.Modes.LaneClear;
-
-namespace Rice.Modes
+﻿namespace Rice.Modes
 {
     using System.Linq;
 
@@ -11,17 +9,17 @@ namespace Rice.Modes
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) && Player.Instance.ManaPercent > Settings.Mana;
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear) && Player.Instance.ManaPercent > Config.Modes.LaneClear.Mana;
         }
 
         public override void Execute()
         {
             var monsters = EntityManager.MinionsAndMonsters.Monsters.Where(x => x.IsValidTarget(Q.Range)).OrderByDescending(x => x.MaxHealth);
 
-            var shouldQ = Settings.UseQ && Q.IsReady();
-            var shouldW = Settings.UseW && W.IsReady() && ModeManager.LastSpell != SpellSlot.E;
-            var shouldE = Settings.UseE && E.IsReady() && ModeManager.LastSpell != SpellSlot.W;
-            var shouldR = Settings.UseR && R.IsReady();
+            var shouldQ = Config.Modes.LaneClear.UseQ && Q.IsReady();
+            var shouldW = Config.Modes.LaneClear.UseW && W.IsReady() && ModeManager.LastSpell != SpellSlot.E;
+            var shouldE = Config.Modes.LaneClear.UseE && E.IsReady() && ModeManager.LastSpell != SpellSlot.W;
+            var shouldR = Config.Modes.LaneClear.UseR && R.IsReady();
 
             var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE, shouldR }.Count(x => x);
 

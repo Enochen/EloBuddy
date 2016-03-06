@@ -1,4 +1,4 @@
-﻿namespace Rice
+﻿namespace HeavyGragas
 {
     using EloBuddy;
     using EloBuddy.SDK;
@@ -7,32 +7,27 @@
     {
         public static float GetTotalDamage(Obj_AI_Base target)
         {
-            // Auto attack
             var damage = Player.Instance.GetAutoAttackDamage(target);
 
-            // Q
-            if (SpellManager.Q1.IsReady())
+            if (SpellManager.Q.IsReady())
             {
-                damage += SpellManager.Q1.GetRealDamage(target);
+                damage += SpellManager.Q.GetRealDamage(target);
             }
 
-            // W
             if (SpellManager.W.IsReady())
             {
                 damage += SpellManager.W.GetRealDamage(target);
             }
 
-            // E
             if (SpellManager.E.IsReady())
             {
                 damage += SpellManager.E.GetRealDamage(target);
             }
 
-            // R - No Damage
-            //if (SpellManager.R.IsReady())
-            //{
-            //    damage += SpellManager.R.GetRealDamage(target);
-            //}
+            if (SpellManager.R.IsReady())
+            {
+                damage += SpellManager.R.GetRealDamage(target);
+            }
 
             return damage;
         }
@@ -44,33 +39,34 @@
 
         public static float GetRealDamage(this SpellSlot slot, Obj_AI_Base target)
         {
-            // Helpers
             var spellLevel = Player.Instance.Spellbook.GetSpell(slot).Level;
             const DamageType DamageType = DamageType.Magical;
             double damage = 0;
 
-            // Validate spell level
             if (spellLevel == 0)
             {
                 return 0;
             }
-            spellLevel--;
 
             switch (slot)
             {
                 case SpellSlot.Q:
-
-                    damage = 45 + (15 * spellLevel) + (.55 * Player.Instance.TotalMagicalDamage) + ((.015 + (0.05 * spellLevel)) * Player.Instance.MaxMana);
+                    damage = 40 + 40 * spellLevel + .60 * Player.Instance.TotalMagicalDamage;
+                    if (target.IsMinion) damage *= .7;
+                    if (EventManager.QBarrel != null) damage *= (1 + (Game.Time - EventManager.BarrelTime) * .25).Limit(1.5);
                     break;
 
                 case SpellSlot.W:
-
-                    damage = 60 + (20 * spellLevel) + (.40 * Player.Instance.TotalMagicalDamage) + (0.025 * Player.Instance.MaxMana);
+                    damage = -10 + 30 * spellLevel + .30 * Player.Instance.TotalMagicalDamage
+                             + .08 * target.MaxHealth;
                     break;
 
                 case SpellSlot.E:
+                    damage = 30 + 50 * spellLevel + .60 * Player.Instance.TotalMagicalDamage;
+                    break;
 
-                    damage = 40 + (32 * spellLevel) + (.40 * Player.Instance.TotalMagicalDamage) + (0.04 * Player.Instance.MaxMana);
+                case SpellSlot.R:
+                    damage = 100 + 100 * spellLevel + .70 * Player.Instance.TotalMagicalDamage;
                     break;
             }
 

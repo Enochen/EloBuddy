@@ -1,10 +1,11 @@
-﻿using System;
-using System.Linq;
-using EloBuddy;
-using EloBuddy.SDK;
-
-namespace Rice
+﻿namespace Rice
 {
+    using System;
+    using System.Linq;
+
+    using EloBuddy;
+    using EloBuddy.SDK;
+
     public static class Extensions
     {
         public static bool HasUndyingBuff(this AIHeroClient target)

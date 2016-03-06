@@ -1,12 +1,10 @@
-﻿using Color = System.Drawing.Color;
+﻿using System.Linq;
+using EloBuddy.SDK.Menu;
+using EloBuddy.SDK.Menu.Values;
+using Color = System.Drawing.Color;
 
-namespace Rice
+namespace Reborn_Leona
 {
-    using System.Linq;
-
-    using EloBuddy.SDK.Menu;
-    using EloBuddy.SDK.Menu.Values;
-
     public static class ColorMenu
     {
         private static readonly Color[] Colors =

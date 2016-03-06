@@ -1,17 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5E75F1B7-F642-4674-AA6D-BE5B42CA8874}</ProjectGuid>
+    <ProjectGuid>{3BFBA917-018A-4803-A087-C527E56C18C5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rice</RootNamespace>
-    <AssemblyName>Rice</AssemblyName>
+    <RootNamespace>HeavyGragas</RootNamespace>
+    <AssemblyName>HeavyGragas</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <OutputPath>bin\Release\</OutputPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -22,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -31,48 +34,54 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EloBuddy">
-      <HintPath>C:\Users\Darak\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
+    <Reference Include="EloBuddy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7339047cb10f6e86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\System\EloBuddy.dll</HintPath>
     </Reference>
-    <Reference Include="EloBuddy.SDK">
-      <HintPath>C:\Users\Darak\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
+    <Reference Include="EloBuddy.SDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6b574a82b1ea937e, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\System\EloBuddy.SDK.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>C:\Users\Darak\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
+    <Reference Include="SharpDX, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\System\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\Users\Darak\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
+    <Reference Include="SharpDX.Direct3D9, Version=2.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorMenu.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DamageIndicator.cs" />
+    <Compile Include="EventManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Humanizer.cs" />
     <Compile Include="ModeManager.cs" />
-    <Compile Include="Modes\TearStack.cs" />
-    <Compile Include="Modes\PassiveStack.cs" />
-    <Compile Include="Modes\PermaActive.cs" />
+    <Compile Include="Modes\Insec.cs" />
+    <Compile Include="Modes\Combo.cs" />
     <Compile Include="Modes\Flee.cs" />
-    <Compile Include="Modes\LaneClear.cs" />
+    <Compile Include="Modes\Harass.cs" />
     <Compile Include="Modes\JungleClear.cs" />
     <Compile Include="Modes\LastHit.cs" />
-    <Compile Include="Modes\Harass.cs" />
-    <Compile Include="Modes\Combo.cs" />
+    <Compile Include="Modes\LaneClear.cs" />
     <Compile Include="Modes\ModeBase.cs" />
+    <Compile Include="Modes\PermaActive.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellDamage.cs" />
+    <Compile Include="DrawManager.cs" />
     <Compile Include="SpellManager.cs" />
     <Compile Include="WidthMenu.cs" />
   </ItemGroup>

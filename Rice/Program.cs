@@ -1,6 +1,4 @@
-﻿using Settings = Rice.Config.Modes.Draw;
-
-namespace Rice
+﻿namespace Rice
 {
     using System;
     using System.Drawing;
@@ -68,34 +66,34 @@ namespace Rice
 
         private static void OnDraw(EventArgs args)
         {
-            if (Settings.DrawStackStatus)
+            if (Config.Modes.Draw.DrawStackStatus)
             {
                 StackingStatus.Position = Player.Instance.Position.WorldToScreen()
                                           - new Vector2((float)(StackingStatus.Bounding.Width / 2.0), -38);
                 StackingStatus.Draw();
             }
 
-            if (Settings.DrawReady ? SpellManager.Q1.IsReady() : Settings.DrawQ)
+            if (Config.Modes.Draw.DrawReady ? SpellManager.Q1.IsReady() : Config.Modes.Draw.DrawQ)
             {
-                new Circle { Color = Settings.colorQ, BorderWidth = Settings._widthQ, Radius = SpellManager.Q1.Range }
+                new Circle { Color = Config.Modes.Draw.colorQ, BorderWidth = Config.Modes.Draw._widthQ, Radius = SpellManager.Q1.Range }
                     .Draw(Player.Instance.Position);
             }
 
-            if (Settings.DrawReady ? SpellManager.W.IsReady() : Settings.DrawW)
+            if (Config.Modes.Draw.DrawReady ? SpellManager.W.IsReady() : Config.Modes.Draw.DrawW)
             {
-                new Circle { Color = Settings.colorW, BorderWidth = Settings._widthW, Radius = SpellManager.W.Range }
+                new Circle { Color = Config.Modes.Draw.colorW, BorderWidth = Config.Modes.Draw._widthW, Radius = SpellManager.W.Range }
                     .Draw(Player.Instance.Position);
             }
 
-            if (Settings.DrawReady ? SpellManager.E.IsReady() : Settings.DrawE)
+            if (Config.Modes.Draw.DrawReady ? SpellManager.E.IsReady() : Config.Modes.Draw.DrawE)
             {
-                new Circle { Color = Settings.colorE, BorderWidth = Settings._widthE, Radius = SpellManager.E.Range }
+                new Circle { Color = Config.Modes.Draw.colorE, BorderWidth = Config.Modes.Draw._widthE, Radius = SpellManager.E.Range }
                     .Draw(Player.Instance.Position);
             }
 
-            if (Settings.DrawReady ? SpellManager.R.IsReady() : Settings.DrawR)
+            if (Config.Modes.Draw.DrawReady ? SpellManager.R.IsReady() : Config.Modes.Draw.DrawR)
             {
-                new Circle { Color = Settings.colorR, BorderWidth = Settings._widthR, Radius = SpellManager.R.Range }
+                new Circle { Color = Config.Modes.Draw.colorR, BorderWidth = Config.Modes.Draw._widthR, Radius = SpellManager.R.Range }
                     .Draw(Player.Instance.Position);
             }
         }

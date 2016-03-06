@@ -1,4 +1,6 @@
-﻿namespace Rice
+﻿using Settings = Reborn_Leona.Config.Modes.Draw;
+
+namespace Reborn_Leona
 {
     using System;
     using System.Linq;

@@ -1,6 +1,4 @@
-﻿using Settings = Rice.Config.Modes.LastHit;
-
-namespace Rice.Modes
+﻿namespace Rice.Modes
 {
     using System.Linq;
 
@@ -11,7 +9,7 @@ namespace Rice.Modes
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) && Player.Instance.ManaPercent > Settings.Mana;
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LastHit) && Player.Instance.ManaPercent > Config.Modes.LastHit.Mana;
         }
 
         public override void Execute()
@@ -19,7 +17,7 @@ namespace Rice.Modes
             if (Orbwalker.IsAutoAttacking) { return; }
             var minions = EntityManager.MinionsAndMonsters.EnemyMinions.Where(x => x.IsValidTarget(Q.Range)).OrderBy(x=>x.Health);
 
-            var shouldQ = Settings.UseQ && Q.IsReady();
+            var shouldQ = Config.Modes.LastHit.UseQ && Q.IsReady();
 
             foreach (var minion in minions)
             {

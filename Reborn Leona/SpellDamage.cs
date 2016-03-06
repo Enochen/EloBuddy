@@ -1,8 +1,8 @@
-﻿namespace Rice
-{
-    using EloBuddy;
-    using EloBuddy.SDK;
+﻿using EloBuddy;
+using EloBuddy.SDK;
 
+namespace Reborn_Leona
+{
     public static class SpellDamage
     {
         public static float GetTotalDamage(Obj_AI_Base target)
@@ -11,9 +11,9 @@
             var damage = Player.Instance.GetAutoAttackDamage(target);
 
             // Q
-            if (SpellManager.Q1.IsReady())
+            if (SpellManager.Q.IsReady())
             {
-                damage += SpellManager.Q1.GetRealDamage(target);
+                damage += SpellManager.Q.GetRealDamage(target);
             }
 
             // W
@@ -28,11 +28,11 @@
                 damage += SpellManager.E.GetRealDamage(target);
             }
 
-            // R - No Damage
-            //if (SpellManager.R.IsReady())
-            //{
-            //    damage += SpellManager.R.GetRealDamage(target);
-            //}
+            //R
+            if (SpellManager.R.IsReady())
+            {
+                damage += SpellManager.R.GetRealDamage(target);
+            }
 
             return damage;
         }
@@ -54,23 +54,27 @@
             {
                 return 0;
             }
-            spellLevel--;
 
             switch (slot)
             {
                 case SpellSlot.Q:
 
-                    damage = 45 + (15 * spellLevel) + (.55 * Player.Instance.TotalMagicalDamage) + ((.015 + (0.05 * spellLevel)) * Player.Instance.MaxMana);
+                    damage = (10 + (30 * spellLevel)) + (.30 * Player.Instance.TotalMagicalDamage);
                     break;
 
                 case SpellSlot.W:
 
-                    damage = 60 + (20 * spellLevel) + (.40 * Player.Instance.TotalMagicalDamage) + (0.025 * Player.Instance.MaxMana);
+                    damage = (10 + (50 * spellLevel)) + (.40 * Player.Instance.TotalMagicalDamage);
                     break;
 
                 case SpellSlot.E:
 
-                    damage = 40 + (32 * spellLevel) + (.40 * Player.Instance.TotalMagicalDamage) + (0.04 * Player.Instance.MaxMana);
+                    damage = (20 + (40 * spellLevel)) + (.40 * Player.Instance.TotalMagicalDamage);
+                    break;
+
+                case SpellSlot.R:
+
+                    damage = (50 + (100 * spellLevel)) + (.80 * Player.Instance.TotalMagicalDamage);
                     break;
             }
 

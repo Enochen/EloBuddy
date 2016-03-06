@@ -1,7 +1,7 @@
-﻿namespace Rice.Modes
-{
-    using EloBuddy.SDK;
+﻿using EloBuddy.SDK;
 
+namespace Reborn_Leona.Modes
+{
     public sealed class Flee : ModeBase
     {
         public override bool ShouldBeExecuted()

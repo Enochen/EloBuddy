@@ -1,6 +1,4 @@
-﻿using Settings = Rice.Config.Modes.Combo;
-
-namespace Rice.Modes
+﻿namespace Rice.Modes
 {
     using System.Linq;
 
@@ -11,12 +9,12 @@ namespace Rice.Modes
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && Player.Instance.ManaPercent > Settings.Mana;
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && Player.Instance.ManaPercent > Config.Modes.Combo.Mana;
         }
 
         public override void Execute()
         {
-            if (Settings.blockAA) Orbwalker.DisableAttacking = true;
+            if (Config.Modes.Combo.blockAA) Orbwalker.DisableAttacking = true;
 
             var target = TargetSelector.GetTarget(W.Range, DamageType.Magical);
             if (target == null)
@@ -24,10 +22,10 @@ namespace Rice.Modes
                 return;
             }
 
-            var shouldQ = Settings.UseQ && Q.IsReady();
-            var shouldW = Settings.UseW && W.IsReady() && ModeManager.LastSpell != SpellSlot.E;
-            var shouldE = Settings.UseE && E.IsReady() && ModeManager.LastSpell != SpellSlot.W;
-            var shouldR = Settings.UseR && R.IsReady();
+            var shouldQ = Config.Modes.Combo.UseQ && Q.IsReady();
+            var shouldW = Config.Modes.Combo.UseW && W.IsReady() && ModeManager.LastSpell != SpellSlot.E;
+            var shouldE = Config.Modes.Combo.UseE && E.IsReady() && ModeManager.LastSpell != SpellSlot.W;
+            var shouldR = Config.Modes.Combo.UseR && R.IsReady();
 
             var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE, shouldR}.Count(x => x);
 

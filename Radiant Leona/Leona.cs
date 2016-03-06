@@ -170,10 +170,5 @@
                     6);
             }
         }
-
-        public static bool WActive()
-        {
-            return Player.HasBuff("rivenwindslashready");
-        }
     }
 }

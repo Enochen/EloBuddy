@@ -1,8 +1,9 @@
-﻿namespace Rice.Modes
-{
-    using EloBuddy;
-    using EloBuddy.SDK;
+﻿using EloBuddy;
+using EloBuddy.SDK;
+using Settings = Reborn_Leona.Config.Modes.Harass;
 
+namespace Reborn_Leona.Modes
+{
     public sealed class Harass : ModeBase
     {
         public override bool ShouldBeExecuted()
@@ -12,12 +13,7 @@
 
         public override void Execute()
         {
-            if (!Config.Modes.Harass.UseQ || !Q.IsReady()) { return; }
-            var target = TargetSelector.GetTarget(this.Q.Range, DamageType.Physical);
-            if (target != null)
-            {
-                this.Q.PredCast(target);
-            }
+            
         }
     }
 }
