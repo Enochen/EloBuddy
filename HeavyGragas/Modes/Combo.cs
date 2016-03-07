@@ -22,13 +22,12 @@ namespace HeavyGragas.Modes
 
             var target = TargetSelector.GetTarget(Q.Range + 200, DamageType.Magical);
             if (target == null) { return; }
-            
+
             var predPos = Q.GetPrediction(target).CastPosition;
 
-            if (Player.Instance.HasBuff("GragasWAttackBuff") && Player.Instance.IsInAutoAttackRange(comboTarget))
+            if (Player.Instance.HasBuff("GragasWAttackBuff") && Player.Instance.IsInAutoAttackRange(target))
             {
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, comboTarget);
-                
+                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
             }
 
             if (shouldW)
@@ -43,11 +42,6 @@ namespace HeavyGragas.Modes
                     CastE(target);
 
                     CastQ1(predPos);
-
-                    //if (Player.Instance.IsInAutoAttackRange(comboTarget))
-                    //{
-                    //    Player.IssueOrder(GameObjectOrder.AttackUnit, comboTarget);
-                    //}
                 }
             }
 
