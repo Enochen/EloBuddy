@@ -16,19 +16,7 @@
 
                 private static readonly CheckBox _useE;
 
-                private static readonly CheckBox _useR;
-
-                private static readonly Slider _rEnemies;
-
                 private static readonly Slider MinMana;
-
-                public static int REnemies
-                {
-                    get
-                    {
-                        return _rEnemies.CurrentValue;
-                    }
-                }
 
                 public static int Mana
                 {
@@ -62,25 +50,13 @@
                     }
                 }
 
-                public static bool UseR
-                {
-                    get
-                    {
-                        return _useR.CurrentValue;
-                    }
-                }
-
                 static Combo()
                 {
                     ModesMenu.AddGroupLabel("Combo");
                     _useQ = ModesMenu.Add("comboQ", new CheckBox("Use Q"));
                     _useW = ModesMenu.Add("comboW", new CheckBox("Use W"));
                     _useE = ModesMenu.Add("comboE", new CheckBox("Use E"));
-                    _useR = ModesMenu.Add("comboR", new CheckBox("Use R"));
                     MinMana = ModesMenu.Add("comboMana", new Slider("Minimum Mana %"));
-                    _rEnemies = ModesMenu.Add(
-                        "comboREnemies",
-                        new Slider("Cast R If Can Hit", 3, 1, EntityManager.Heroes.Enemies.Count));
                 }
 
                 public static void Initialize()
