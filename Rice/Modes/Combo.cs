@@ -9,12 +9,13 @@
     {
         public override bool ShouldBeExecuted()
         {
-            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo) && Player.Instance.ManaPercent > Config.Modes.Combo.Mana;
+            return Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo)
+                   && Player.Instance.ManaPercent > Config.Modes.Combo.Mana;
         }
 
         public override void Execute()
         {
-            if (Config.Modes.Combo.blockAA) Orbwalker.DisableAttacking = true;
+            if (Config.Modes.Combo.blockAA) { Orbwalker.DisableAttacking = true; }
 
             var target = TargetSelector.GetTarget(W.Range, DamageType.Magical);
             if (target == null)
@@ -27,66 +28,58 @@
             var shouldE = Config.Modes.Combo.UseE && E.IsReady() && ModeManager.LastSpell != SpellSlot.W;
             var shouldR = Config.Modes.Combo.UseR && R.IsReady();
 
-            var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE, shouldR}.Count(x => x);
-
+            var stacks = ModeManager.PassiveCount + new[] { shouldQ, shouldW, shouldE, shouldR }.Count(x => x);
+            
             switch (ModeManager.PassiveCount)
             {
+                case 1:
                 case 2:
-                    if (Q.IsReady() && W.IsReady() && E.IsReady())
+                    if (shouldR)
+                    {
+                        R.Cast();
+                    }
+                    else
                     {
                         if (shouldE)
                         {
                             E.Cast(target);
-                            if (shouldQ)
-                            {
-                                Q.PredCast(target);
-                            }
-                            return;
                         }
+                        else
+                        {
+                            Q.PredCast(target);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    if (shouldE)
+                    {
+                        E.Cast(target);
+                    }
+                    else
+                    {
+                        Q.PredCast(target);
                     }
                     break;
 
                 case 4:
-                    if (shouldW)
+                    W.Cast(target);
+                    break;
+
+                default:
+                    if (shouldQ)
+                    {
+                        Q.PredCast(target);
+                    }
+                    else if (shouldE)
+                    {
+                        E.Cast(target);
+                    }
+                    else
                     {
                         W.Cast(target);
-                        if (shouldQ)
-                        {
-                            Q.PredCast(target);
-                        }
-                        
-                    }
-                    if (shouldR && (ModeManager.PassiveCharged || SpellDamage.GetTotalDamage(target) > target.Health))
-                    {
-                        R.Cast();
-                        return;
                     }
                     break;
-            }
-
-            if (shouldW && ModeManager.LastSpell != SpellSlot.E)
-            {
-                W.Cast(target);
-                if (shouldQ)
-                {
-                    Q.PredCast(target);
-                }
-                return;
-            }
-            if (shouldR
-                && (stacks > 4 || ModeManager.PassiveCharged || SpellDamage.GetTotalDamage(target) > target.Health))
-            {
-                R.Cast();
-                return;
-            }
-            if (shouldE && ModeManager.LastSpell != SpellSlot.W)
-            {
-                E.Cast(target);
-                return;
-            }
-            if (shouldQ)
-            {
-                Q.PredCast(target);
             }
         }
     }
